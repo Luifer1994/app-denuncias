@@ -1,4 +1,4 @@
-# app-denuncias
+# volt_vue
 
 ## Project setup
 ```

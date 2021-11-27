@@ -1,30 +1,31 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+  <Sidebar v-if="$route.name !=='Login'"></Sidebar>
+  <main class="content">
+    <Navbar v-if="$route.name !=='Login'"></Navbar>
+
+    <!--  RENDERIZACION DE COMPONENTES -->
+    <router-view />
+    <!--  FIN -->
+  </main>
 </template>
 
+<script>
+import Sidebar from "./components/Sidebar.vue";
+import Navbar from "./components/Navbar.vue";
+export default {
+  components: {
+    Sidebar,
+    Navbar,
+  },
+};
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
+a.router-link-exact-active {
+  color: #ffffff;
   font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.308);
+  padding: 5px;
 }
 </style>
