@@ -72,6 +72,7 @@
             </a>
           </div>
         </div>
+       
         <ul id="nav" class="nav flex-column pt-3 pt-md-0">
           <li class="nav-item">
             <router-link
@@ -119,15 +120,26 @@
             </router-link>
           </li>
           <li class="nav-item">
+            <router-link to="/informers" class="nav-link">
+              <div data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
+                <span class="sidebar-icon">
+                  <i class="fas fa-user-check"></i>
+                </span>
+                <span class="sidebar-text">Denunciantes</span>
+              </div>
+            </router-link>
+          </li>
+          <li class="nav-item">
             <a
+            style="background-color:white"
               href="#"
-              class="btn btn-secondary d-flex align-items-center justify-content-center btn-upgrade-pro"
+              class="btn d-flex align-items-center justify-content-center btn-upgrade-pro"
             >
               <span
                 class="sidebar-icon d-inline-flex align-items-center justify-content-center"
               >
               </span>
-              <span><img style="width: 25px" src="https://vuejs.org/images/logo.svg" /> Vue JS</span>
+              <span><img  src="../assets/logo-coralina.png" /></span>
             </a>
           </li>
         </ul>
@@ -136,10 +148,13 @@
     <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
     <a class="navbar-brand me-lg-5" href="/">
       <img
+        style="width:80px; height:60px"
         class="navbar-brand-dark"
-        src="https://vuejs.org/images/logo.svg"
+        src="../assets/favicon.png"
         alt="Volt logo"
       />
+      <br>
+      Denuncias
     </a>
     <div class="d-flex align-items-center">
       <button

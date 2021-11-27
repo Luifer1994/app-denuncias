@@ -3,86 +3,91 @@
   <section class="vh-lg-100 mt-5 mt-lg-0 bg-soft d-flex align-items-center">
     <div class="container">
       <div class="col-lg-8 d-flex align-items-center justify-content-center">
-          <div
-            class="bg-white shadow border-0 rounded border-light p-4 p-lg-5 w-100 fmxw-500"
-          >
-           
-              <!-- Form -->
-              <div class="form-group mb-4 mt-4">
-                <label for="email">Email</label>
-                <div class="input-group">
-                  <span class="input-group-text" id="basic-addon1">
-                    <svg
-                      class="icon icon-xs text-gray-600"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
-                      ></path>
-                      <path
-                        d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
-                      ></path>
-                    </svg>
-                  </span>
-                   <input
-                    v-model="userEmail"
-                    type="email"
-                    class="form-control"
-                    placeholder="example@company.com"
-                    id="email"
-                    autofocus
-                    required
-                  />
-                </div>
-              </div>
-              <!-- End of Form -->
-              <div class="form-group">
-                <!-- Form -->
-                <div class="form-group mb-4">
-                  <label for="password">Contraseña</label>
-                  <div class="input-group">
-                    <span class="input-group-text" id="basic-addon2">
-                      <svg
-                        class="icon icon-xs text-gray-600"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                          clip-rule="evenodd"
-                        ></path>
-                      </svg>
-                    </span>
-                    <input
-                      v-model="userPassword"
-                      type="password"
-                      placeholder="Password"
-                      class="form-control"
-                      id="password"
-                      required
-                    />
-                  </div>
-                </div>
-                
-              </div>
-              <div class="d-grid">
-                 <button @click="login" class="btn btn-gray-800">Login</button>
-              </div>
-          
-           
-           
-            <div class="d-flex justify-content-center align-items-center mt-4">
-              <span class="fw-normal">
-                No estas registrado?
-                <a href="./sign-up.html" class="fw-bold">Crear cuenta</a>
+        <div
+          class="
+            bg-white
+            shadow
+            border-0
+            rounded
+            border-light
+            p-4 p-lg-5
+            w-100
+            fmxw-500
+          "
+        >
+          <!-- Form -->
+          <div class="form-group mb-4 mt-4">
+            <label for="email">Email</label>
+            <div class="input-group">
+              <span class="input-group-text" id="basic-addon1">
+                <svg
+                  class="icon icon-xs text-gray-600"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                  ></path>
+                  <path
+                    d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                  ></path>
+                </svg>
               </span>
+              <input
+                v-model="userEmail"
+                type="email"
+                class="form-control"
+                placeholder="example@company.com"
+                id="email"
+                autofocus
+                required
+              />
             </div>
           </div>
+          <!-- End of Form -->
+          <div class="form-group">
+            <!-- Form -->
+            <div class="form-group mb-4">
+              <label for="password">Contraseña</label>
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon2">
+                  <svg
+                    class="icon icon-xs text-gray-600"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                </span>
+                <input
+                  v-model="userPassword"
+                  type="password"
+                  placeholder="Password"
+                  class="form-control"
+                  id="password"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="d-grid">
+            <button @click="login" class="btn btn-gray-800">Login</button>
+          </div>
+
+          <div class="d-flex justify-content-center align-items-center mt-4">
+            <span class="fw-normal">
+              No estas registrado?
+              <a href="./sign-up.html" class="fw-bold">Crear cuenta</a>
+            </span>
+          </div>
         </div>
+      </div>
     </div>
   </section>
 </template>
@@ -94,31 +99,37 @@ export default {
     return {
       userEmail: null,
       userPassword: null,
+      urlApi: process.env.VUE_APP_URL_API,
     };
   },
   mounted() {
     window.$("#myModal").modal("toggle");
   },
   methods: {
-    login() {
-      let dataUser = new Object();
-      dataUser.email = this.userEmail;
-      dataUser.password = this.userPassword;
-      console.log(dataUser);
-      axios.post("https://miapi.live/public/api/login", dataUser).then((result) => {
-        console.log(result);
-        if (!result.data.res) {
-          this.message = result.data.message;
-          this.noty(this.message, "error");
-        } else {
-          this.message = result.data.message;
+    async login() {
+      try {
+        let dataUser = new Object();
+        dataUser.email = this.userEmail;
+        dataUser.password = this.userPassword;
+        let res = await axios.post(this.urlApi + "login", dataUser);
+        if (res.data.data.user.rol.id == 1) {
+          this.message = res.data.data.message;
           this.noty(this.message, "info");
-          localStorage.token = result.data.token;
+          localStorage.token = res.data.data.token;
+          localStorage.setItem("user", JSON.stringify(res.data.data.user));
           this.$router.push("/");
-          window.$("#myModal").modal("toggle");
+        } else {
+          this.noty("No tienes permiso para entrar al sistema", "error");
         }
-      });
+      } catch (error) {
+        if (this.userEmail == "" || this.userPassword == "") {
+          this.noty("Email y password son requeridos", "error");
+        } else {
+          this.noty("Email o Contraseña incorrecta", "error");
+        }
+      }
     },
+
     noty(message, typeMessage) {
       const notyf = new window.noty({
         position: {

@@ -80,7 +80,10 @@
                   My Profile
                 </router-link>
                 <div role="separator" class="dropdown-divider my-1"></div>
-                <a @click="logout" class="dropdown-item d-flex align-items-center">
+                <a
+                  @click="logout"
+                  class="dropdown-item d-flex align-items-center"
+                >
                   <svg
                     class="dropdown-icon text-danger me-2"
                     fill="none"
@@ -110,15 +113,28 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   name: "Navbar",
+  data() {
+    return {
+      urlApi: process.env.VUE_APP_URL_API,
+      token: localStorage.getItem("token"),
+    };
+  },
+
   methods: {
-    logout() {
-      if (localStorage.getItem("token")) {
+    async logout() {
+      let response = await axios.get(this.urlApi+"logout", {
+        headers: { Authorization: `Bearer ${this.token}` },
+      });
+      console.log(response.data);
+      if (response.data.res && localStorage.getItem("token") && localStorage.getItem("user")) {
         localStorage.removeItem("token");
+         localStorage.removeItem("user");
       }
-      this.$router.push('/login')
-    },
+      this.$router.push("/login");
+    }
   },
 };
 </script>
