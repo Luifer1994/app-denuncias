@@ -58,36 +58,6 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/transactions" class="nav-link">
-              <div data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
-                <span class="sidebar-icon">
-                  <i class="fas fa-credit-card"></i>
-                </span>
-                <span class="sidebar-text">Transacciones</span>
-              </div>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/orders" class="nav-link">
-              <div data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
-                <span class="sidebar-icon">
-                  <i class="fas fa-users"></i>
-                </span>
-                <span class="sidebar-text">Usuarios</span>
-              </div>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/libros" class="nav-link">
-              <div data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
-                <span class="sidebar-icon">
-                  <i class="fas fa-users"></i>
-                </span>
-                <span class="sidebar-text">Libros</span>
-              </div>
-            </router-link>
-          </li>
-          <li class="nav-item">
             <router-link to="/informers" class="nav-link">
               <div data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
                 <span class="sidebar-icon">

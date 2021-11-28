@@ -8,30 +8,6 @@ const routes = [{
             import ( /* webpackChunkName: "about" */ '../components/Dashboard.vue')
     },
     {
-        path: '/transactions',
-        name: 'Transactions',
-        component: () =>
-            import ( /* webpackChunkName: "about" */ '../components/HelloWorld.vue')
-    },
-    {
-        path: '/orders',
-        name: 'Orders',
-        component: () =>
-            import ( /* webpackChunkName: "about" */ '../components/Orders.vue')
-    },
-    {
-        path: '/perfil',
-        name: 'Perfil',
-        component: () =>
-            import ( /* webpackChunkName: "about" */ '../components/Perfil.vue')
-    },
-    {
-        path: '/libros',
-        name: 'Libros',
-        component: () =>
-            import ( /* webpackChunkName: "about" */ '../components/Books.vue')
-    },
-    {
         path: '/login',
         name: 'Login',
         component: () =>
