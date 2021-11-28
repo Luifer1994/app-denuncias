@@ -1,18 +1,10 @@
 <template>
   <div class="">
     <nav
-      class="
-        navbar navbar-top navbar-expand navbar-dashboard navbar-dark
-        ps-0
-        pe-2
-        pb-0
-      "
+      class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0"
     >
       <div class="container-fluid px-0">
-        <div
-          class="d-flex justify-content-between w-100"
-          id="navbarSupportedContent"
-        >
+        <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
           <div class="d-flex align-items-center"></div>
           <!-- Navbar links -->
           <ul class="navbar-nav align-items-center">
@@ -31,29 +23,15 @@
                     src="https://www.shareicon.net/data/2016/05/26/771188_man_512x512.png"
                   />
                   <div
-                    class="
-                      media-body
-                      ms-2
-                      text-dark
-                      align-items-center
-                      d-none d-lg-block
-                    "
+                    class="media-body ms-2 text-dark align-items-center d-none d-lg-block"
                   >
-                    <span class="mb-0 font-small fw-bold text-gray-900"
-                      >{{this.user.name}}</span
-                    >
+                    <span class="mb-0 font-small fw-bold text-gray-900">{{
+                      this.$store.state.user.name
+                    }}</span>
                   </div>
                 </div>
               </a>
-              <div
-                class="
-                  dropdown-menu
-                  dashboard-dropdown
-                  dropdown-menu-end
-                  mt-2
-                  py-1
-                "
-              >
+              <div class="dropdown-menu dashboard-dropdown dropdown-menu-end mt-2 py-1">
                 <router-link
                   to="/perfil"
                   class="dropdown-item d-flex align-items-center"
@@ -63,10 +41,7 @@
                   My Perfil
                 </router-link>
                 <div role="separator" class="dropdown-divider my-1"></div>
-                <a
-                  @click="logout"
-                  class="dropdown-item d-flex align-items-center"
-                >
+                <a @click="logout" class="dropdown-item d-flex align-items-center">
                   <i class="fas fa-sign-out-alt text-danger m-2"></i>
                   Cerrar sesión
                 </a>
@@ -79,31 +54,12 @@
   </div>
 </template>
 <script>
-import axios from "axios";
 export default {
   name: "Navbar",
-  data() {
-    return {
-      urlApi: process.env.VUE_APP_URL_API,
-      token: localStorage.getItem("token"),
-      user: JSON.parse(localStorage.getItem("user")),
-    };
-  },
 
   methods: {
-    async logout() {
-      let response = await axios.get(this.urlApi + "logout", {
-        headers: { Authorization: `Bearer ${this.token}` },
-      });
-      console.log(response.data);
-      if (
-        response.data.res &&
-        localStorage.getItem("token") &&
-        localStorage.getItem("user")
-      ) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-      }
+    logout() {
+      this.$store.dispatch("logout");
       this.$router.push("/login");
     },
   },

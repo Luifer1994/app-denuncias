@@ -47,6 +47,7 @@
       </div>
     </div>
   </div>
+  
   <div class="card card-body border-0 shadow table-wrapper table-responsive">
     <div v-if="!informers" class="d-flex justify-content-center">
       <div
@@ -144,6 +145,7 @@
       </div>
     </div>
   </div>
+  
 </template>
 <script>
 import axios from "axios";
@@ -173,6 +175,7 @@ export default {
       }
     },
     async list(limit = null, page = null) {
+      console.log(this.$store.state.user);
       if (limit) {
         this.limitPage = limit;
       }

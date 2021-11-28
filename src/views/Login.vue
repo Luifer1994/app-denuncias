@@ -4,16 +4,7 @@
     <div class="container">
       <div class="col-lg-8 d-flex align-items-center justify-content-center">
         <div
-          class="
-            bg-white
-            shadow
-            border-0
-            rounded
-            border-light
-            p-4 p-lg-5
-            w-100
-            fmxw-500
-          "
+          class="bg-white shadow border-0 rounded border-light p-4 p-lg-5 w-100 fmxw-500"
         >
           <!-- Form -->
           <div class="form-group mb-4 mt-4">
@@ -79,9 +70,6 @@ export default {
       urlApi: process.env.VUE_APP_URL_API,
     };
   },
-  mounted() {
-    window.$("#myModal").modal("toggle");
-  },
   methods: {
     async login() {
       try {
@@ -89,11 +77,12 @@ export default {
         dataUser.email = this.userEmail;
         dataUser.password = this.userPassword;
         let res = await axios.post(this.urlApi + "login", dataUser);
+        
         if (res.data.data.user.rol.id == 1) {
+          this.$store.commit("userLogin", res.data.data.user);
           this.message = res.data.data.message;
           this.noty(this.message, "info");
           localStorage.token = res.data.data.token;
-          localStorage.setItem("user", JSON.stringify(res.data.data.user));
           this.$router.push("/");
         } else {
           this.noty("No tienes permiso para entrar al sistema", "error");

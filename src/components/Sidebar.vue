@@ -24,7 +24,7 @@
               />
             </div>
             <div class="d-block">
-              <h2 class="h5 mb-3">Hola, {{ this.user.name }}</h2>
+              <h2 class="h5 mb-3">Hola, {{this.$store.state.user.name}}</h2>
             </div>
           </div>
           <div class="collapse-close d-md-none">
@@ -123,11 +123,6 @@
 </template>
 <script>
 export default {
-  name: "Sidebar",
-  data() {
-    return {
-      user: JSON.parse(localStorage.getItem("user")),
-    };
-  },
+  name: "Sidebar"
 };
 </script>

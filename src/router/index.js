@@ -8,6 +8,13 @@ const routes = [{
             import ( /* webpackChunkName: "about" */ '../components/Dashboard.vue')
     },
     {
+        path: '/perfil',
+        name: 'Perfil',
+        component: () =>
+            import ( /* webpackChunkName: "about" */ '../components/Perfil.vue')
+    
+    },
+    {
         path: '/login',
         name: 'Login',
         component: () =>
