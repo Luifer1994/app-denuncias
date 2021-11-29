@@ -64,13 +64,14 @@
 
   <div class="card card-body border-0 shadow table-wrapper table-responsive">
     <div v-if="!informers" class="d-flex justify-content-center">
-      <div
-        class="spinner-border text-success"
-        role="status"
-        style="width: 100px; height: 100px"
-      >
-        <span class="visually-hidden">Loading...</span>
-      </div>
+      <lottie-player
+        src="https://assets2.lottiefiles.com/packages/lf20_FbWGyF.json"
+        background="transparent"
+        speed="2"
+        style="width: 300px; height: 300px"
+        loop
+        autoplay
+      ></lottie-player>
     </div>
     <div
       v-if="total == 0"
