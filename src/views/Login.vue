@@ -4,7 +4,16 @@
     <div class="container">
       <div class="col-lg-8 d-flex align-items-center justify-content-center">
         <div
-          class="bg-white shadow border-0 rounded border-light p-4 p-lg-5 w-100 fmxw-500"
+          class="
+            bg-white
+            shadow
+            border-0
+            rounded
+            border-light
+            p-4 p-lg-5
+            w-100
+            fmxw-500
+          "
         >
           <!-- Form -->
           <div class="form-group mb-4 mt-4">
@@ -77,7 +86,7 @@ export default {
         dataUser.email = this.userEmail;
         dataUser.password = this.userPassword;
         let res = await axios.post(this.urlApi + "login", dataUser);
-        
+
         if (res.data.data.user.rol.id == 1) {
           this.$store.commit("userLogin", res.data.data.user);
           this.message = res.data.data.message;

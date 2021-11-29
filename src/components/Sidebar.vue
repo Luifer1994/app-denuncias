@@ -58,6 +58,16 @@
             </router-link>
           </li>
           <li class="nav-item">
+            <router-link to="/complaints" class="nav-link">
+              <div data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
+                <span class="sidebar-icon">
+                  <i class="fas fa-exclamation-circle"></i>
+                </span>
+                <span class="sidebar-text">Denuncias</span>
+              </div>
+            </router-link>
+          </li>
+          <li class="nav-item">
             <router-link to="/informers" class="nav-link">
               <div data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
                 <span class="sidebar-icon">

@@ -1,13 +1,21 @@
 <template>
   <div
-    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4"
+    class="
+      d-flex
+      justify-content-between
+      flex-wrap flex-md-nowrap
+      align-items-center
+      py-4
+    "
   >
     <div class="d-block mb-4 mb-md-0">
       <h2 class="h4">Denunciantes</h2>
     </div>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group ms-2 ms-lg-3">
-        <button type="button" class="btn btn-sm btn-outline-gray-600">Exportar</button>
+        <button type="button" class="btn btn-sm btn-outline-gray-600">
+          Exportar
+        </button>
       </div>
     </div>
   </div>
@@ -30,7 +38,13 @@
       <div class="col-4 col-md-2 col-xl-1 ps-md-0 text-end">
         <div class="dropdown">
           <button
-            class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-1"
+            class="
+              btn btn-link
+              text-dark
+              dropdown-toggle dropdown-toggle-split
+              m-0
+              p-1
+            "
             data-bs-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
@@ -39,15 +53,15 @@
           </button>
           <div class="dropdown-menu dropdown-menu-xs dropdown-menu-end pb-0">
             <span class="small ps-3 fw-bold text-dark">Ver</span>
-            <a class="dropdown-item fw-bold" @click="views(5)">5 </a>
             <a class="dropdown-item fw-bold" @click="views(10)">10</a>
+            <a class="dropdown-item fw-bold" @click="views(15)">15</a>
             <a class="dropdown-item fw-bold" @click="views(20)">20</a>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
+
   <div class="card card-body border-0 shadow table-wrapper table-responsive">
     <div v-if="!informers" class="d-flex justify-content-center">
       <div
@@ -58,8 +72,16 @@
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
-    <table class="table table-hover">
-      <thead>
+    <div
+      v-if="total == 0"
+      class="alert alert-warning d-flex justify-content-center"
+      role="alert"
+    >
+      <span class="text-danger">Registro no encontrado</span>
+    </div>
+
+    <table class="table table-hover" v-if="total > 0">
+      <thead class="thead-light">
         <tr>
           <th class="border-gray-200">ID</th>
           <th class="border-gray-200">NOMBRE</th>
@@ -99,7 +121,13 @@
           <td>
             <div class="btn-group">
               <button
-                class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
+                class="
+                  btn btn-link
+                  text-dark
+                  dropdown-toggle dropdown-toggle-split
+                  m-0
+                  p-0
+                "
                 data-bs-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
@@ -126,10 +154,18 @@
       </tbody>
     </table>
     <div
-      class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between"
+      class="
+        card-footer
+        px-3
+        border-0
+        d-flex
+        flex-column flex-lg-row
+        align-items-center
+        justify-content-between
+      "
     >
-      <nav aria-label="Page navigation example">
-        <ul class="pagination mb-0">
+      <nav aria-label="Page navigation example" v-if="total > 0">
+        <ul class="pagination mb-0 pagination-sm">
           <li class="page-item" v-for="link in links" :key="link">
             <a
               class="page-link"
@@ -140,12 +176,11 @@
           </li>
         </ul>
       </nav>
-      <div class="fw-normal small mt-4 mt-lg-0">
+      <div class="fw-normal small mt-4 mt-lg-0" v-if="total > 0">
         viendo <b>{{ limitPage }}</b> de <b>{{ total }}</b>
       </div>
     </div>
   </div>
-  
 </template>
 <script>
 import axios from "axios";

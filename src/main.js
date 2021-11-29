@@ -17,9 +17,6 @@ const store = createStore({
     userLogin(state, user) {
       state.user = user;
     },
-    SET_USER(state, user) {
-      state.user = user;
-    },
     RESET_USER(state) {
       state.user = null;
     },
