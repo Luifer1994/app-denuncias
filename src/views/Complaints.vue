@@ -100,14 +100,11 @@
 
   <div class="card card-body border-0 shadow table-wrapper">
     <div v-if="!complaints" class="d-flex justify-content-center">
-      <lottie-player
-        src="https://assets2.lottiefiles.com/packages/lf20_FbWGyF.json"
-        background="transparent"
-        speed="2"
-        style="width: 300px; height: 300px"
-        loop
-        autoplay
-      ></lottie-player>
+      <div class="text-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
     </div>
     <div
       v-if="total == 0"
@@ -139,7 +136,8 @@
               <span class="fw-normal">{{ complaint.type_complaint }}</span>
             </td>
             <td>
-              <span class="fw-normal">{{ complaint.informer }}</span>
+              <span class="fw-normal" v-if="complaint.informer">{{ complaint.informer }}</span>
+              <span v-else class="badge bg-danger"> Anónimo </span>
             </td>
             <td>
               <span class="fw-normal">{{ complaint.name_offender }}</span>
@@ -192,8 +190,9 @@
                   <span class="visually-hidden">Toggle Dropdown</span>
                 </button>
                 <div class="dropdown-menu py-0">
-                  <a class="dropdown-item rounded-top" href="#"
-                    ><span class="fas fa-eye me-2"></span>View Details</a
+                  <a class="dropdown-item rounded-top"
+                    @click="detailComplaint(complaint.id)"
+                    ><span class="fas fa-eye me-2"></span>Ver Detalle</a
                   >
                   <a class="dropdown-item" href="#"
                     ><span class="fas fa-edit me-2"></span>Edit</a
@@ -260,7 +259,6 @@ export default {
   },
   methods: {
     async list(limit = null, page = null, state = "") {
-      console.log(this.$store.state.user);
       if (limit) {
         this.limitPage = limit;
       }
@@ -306,6 +304,9 @@ export default {
       if (value) {
         return moment(String(value)).format("LL");
       }
+    },
+    detailComplaint(id) {
+      this.$router.push({ path: "/complaint/"+id });
     },
   },
 };
