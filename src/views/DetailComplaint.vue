@@ -12,16 +12,16 @@
           <p class="h5">{{ type_complaint }}</p>
         </div>
         <div class="col-8 col-sm-8 col-md-3">
+          <p>Estado:</p>
+          <p class="h5">{{ state }}</p>
+        </div>
+        <div class="col-8 col-sm-8 col-md-3">
           <select class="form-select" style="width: 250px">
             <option selected="selected">Asignar funcionario</option>
             <option value="1">One</option>
             <option value="2">Two</option>
             <option value="3">Three</option>
           </select>
-        </div>
-        <div class="col-8 col-sm-8 col-md-3">
-          <p>Estado:</p>
-          <p class="h5">{{ state }}</p>
         </div>
       </div>
     </div>
@@ -71,7 +71,7 @@ export default {
       description: null,
       media: [],
       array: [],
-      title: "Denuncia: " + this.$route.params.id,
+      title: null,
     };
   },
   mounted() {
@@ -87,6 +87,7 @@ export default {
       this.state = res.data.data.state;
       this.type_complaint = res.data.data.type_complaint;
       this.description = res.data.data.description;
+      this.title = "Denuncia: " + res.data.data.cod;
       res.data.data.media.forEach((element) =>
         this.media.push({
           src: element.url,

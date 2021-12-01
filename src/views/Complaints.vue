@@ -130,13 +130,15 @@
           <!-- Item -->
           <tr v-for="complaint in this.complaints" :key="complaint">
             <td>
-              <a href="#" class="fw-bold">{{ complaint.id }}</a>
+              <a href="#" class="fw-bold">{{ complaint.cod }}</a>
             </td>
             <td>
               <span class="fw-normal">{{ complaint.type_complaint }}</span>
             </td>
             <td>
-              <span class="fw-normal" v-if="complaint.informer">{{ complaint.informer }}</span>
+              <span class="fw-normal" v-if="complaint.informer">{{
+                complaint.informer
+              }}</span>
               <span v-else class="badge bg-danger"> Anónimo </span>
             </td>
             <td>
@@ -171,37 +173,12 @@
               </span>
             </td>
             <td>
-              <div class="btn-group">
-                <button
-                  class="
-                    btn btn-link
-                    text-dark
-                    dropdown-toggle dropdown-toggle-split
-                    m-0
-                    p-0
-                  "
-                  data-bs-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  <span class="icon icon-sm">
-                    <span class="fas fa-ellipsis-h icon-dark"></span>
-                  </span>
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
-                <div class="dropdown-menu py-0">
-                  <a class="dropdown-item rounded-top"
-                    @click="detailComplaint(complaint.id)"
-                    ><span class="fas fa-eye me-2"></span>Ver Detalle</a
-                  >
-                  <a class="dropdown-item" href="#"
-                    ><span class="fas fa-edit me-2"></span>Edit</a
-                  >
-                  <a class="dropdown-item text-danger rounded-bottom" href="#"
-                    ><span class="fas fa-trash-alt me-2"></span>Remove</a
-                  >
-                </div>
-              </div>
+              <button
+                class="btn btn-sm btn-info p-1" title="Detalle"
+                @click="detailComplaint(complaint.id)"
+              >
+                <i class="fas fa-plus-circle"></i>
+              </button>
             </td>
           </tr>
         </tbody>
@@ -306,7 +283,7 @@ export default {
       }
     },
     detailComplaint(id) {
-      this.$router.push({ path: "/complaint/"+id });
+      this.$router.push({ path: "/complaint/" + id });
     },
   },
 };
