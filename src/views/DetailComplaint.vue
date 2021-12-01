@@ -1,19 +1,30 @@
 <template>
-  <time-line :title="title" />
+  <time-line :title="title" :states="states"/>
   <div class="card card-body border-0 shadow">
     <div class="card-body">
       <div class="row g-0">
         <div class="col-8 col-sm-8 col-md-3">
           <p>Denunciante:</p>
-          <p class="h5">{{ informer }}</p>
+          <p class="h5" v-if="informer">{{ informer }}</p>
+          <span class="badge bg-danger" v-else>
+            ANÓNIMO
+          </span>
         </div>
         <div class="col-8 col-sm-8 col-md-3">
           <p>Motivo:</p>
           <p class="h5">{{ type_complaint }}</p>
         </div>
         <div class="col-8 col-sm-8 col-md-3">
-          <p>Estado:</p>
-          <p class="h5">{{ state }}</p>
+          <p>Estado actual:</p>
+          <span class="badge bg-success" v-if="state == 'INICIADA'">
+            {{ state }}
+          </span>
+          <span class="badge bg-info" v-else-if="state == 'EN PROCESO'">
+            {{ state }}
+          </span>
+          <span class="badge bg-danger" v-else>
+            {{ state }}
+          </span>
         </div>
         <div class="col-8 col-sm-8 col-md-3">
           <select class="form-select" style="width: 250px">
@@ -27,7 +38,7 @@
     </div>
   </div>
 
-  <div class="overflow-hidden">
+  <div class="overflow-hidden" id="description">
     <div class="row gx-4">
       <div class="col-12 col-sm-12 col-md-6 mt-2">
         <div class="p-3 card border bg-light" style="height: auto">
@@ -70,7 +81,7 @@ export default {
       type_complaint: null,
       description: null,
       media: [],
-      array: [],
+      states: null,
       title: null,
     };
   },
@@ -88,6 +99,7 @@ export default {
       this.type_complaint = res.data.data.type_complaint;
       this.description = res.data.data.description;
       this.title = "Denuncia: " + res.data.data.cod;
+      this.states = res.data.data.response_complaint;
       res.data.data.media.forEach((element) =>
         this.media.push({
           src: element.url,

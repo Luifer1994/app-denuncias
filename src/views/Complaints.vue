@@ -50,24 +50,24 @@
             aria-expanded="false"
           >
             <b v-if="!state">Estado</b>
-            <b v-else-if="state == 1">Enviada</b>
-            <b v-else-if="state == 2">En proceso</b>
-            <b v-else-if="state == 3">En revisión</b>
-            <b v-else>Cerrada</b>
+            <b v-else-if="state == 1">INICIADA</b>
+            <b v-else-if="state == 2">EN PROCESO</b>
+            <b v-else>FINALIZADA</b>
             <i class="fas fa-filter"></i>
           </button>
           <div class="dropdown-menu dropdown-menu-xs dropdown-menu-end pb-0">
             <a class="dropdown-item fw-bold text-danger" @click="resetFilter()"
               >Limpiar <i class="fas fa-power-off"></i
             ></a>
-            <a class="dropdown-item fw-bold" @click="filterState(1)">Enviada</a>
+            <a class="dropdown-item fw-bold" @click="filterState(1)"
+              >INICIADA</a
+            >
             <a class="dropdown-item fw-bold" @click="filterState(2)"
-              >En proceso</a
+              >EN PROCESO</a
             >
-            <a class="dropdown-item fw-bold" @click="filterState(3)"
-              >En revisión</a
+            <a class="dropdown-item fw-bold" @click="filterState(4)"
+              >FINALIZADA</a
             >
-            <a class="dropdown-item fw-bold" @click="filterState(4)">Cerrada</a>
           </div>
         </div>
       </div>
@@ -152,19 +152,13 @@
             <td>
               <span
                 class="badge bg-success"
-                v-if="complaint.state == 'Enviada'"
+                v-if="complaint.state == 'INICIADA'"
               >
                 {{ complaint.state }}
               </span>
               <span
                 class="badge bg-info"
-                v-else-if="complaint.state == 'En revisión'"
-              >
-                {{ complaint.state }}
-              </span>
-              <span
-                class="badge bg-warning"
-                v-else-if="complaint.state == 'En proceso'"
+                v-else-if="complaint.state == 'EN PROCESO'"
               >
                 {{ complaint.state }}
               </span>
@@ -174,7 +168,8 @@
             </td>
             <td>
               <button
-                class="btn btn-sm btn-info p-1" title="Detalle"
+                class="btn btn-sm btn-info p-1"
+                title="Detalle"
                 @click="detailComplaint(complaint.id)"
               >
                 <i class="fas fa-plus-circle"></i>
