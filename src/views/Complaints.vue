@@ -65,7 +65,7 @@
             <a class="dropdown-item fw-bold" @click="filterState(2)"
               >EN PROCESO</a
             >
-            <a class="dropdown-item fw-bold" @click="filterState(4)"
+            <a class="dropdown-item fw-bold" @click="filterState(3)"
               >FINALIZADA</a
             >
           </div>

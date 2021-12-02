@@ -38,6 +38,7 @@
                   >Detalle</a
                 >
                 <a
+                  @click="getDetail(state.id, state.description)"
                   v-else
                   href="#description"
                   class="btn btn-success text-white btn-sm p-1"
@@ -64,17 +65,26 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">{{title}}</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">{{ title }}</h5>
           <button
+            @click="resetData()"
             type="button"
             class="btn-close"
             data-bs-dismiss="modal"
             aria-label="Close"
           ></button>
         </div>
-        <div class="modal-body">...</div>
+        <div class="modal-body">
+          <h5>Descripcion:</h5>
+          <br />
+          <p>{{ detail }}</p>
+          <hr />
+          <h5>Evidencias:</h5>
+          <vue-picture-swipe :items="media"></vue-picture-swipe>
+        </div>
         <div class="modal-footer">
           <button
+            @click="resetData()"
             type="button"
             class="btn btn-danger"
             data-bs-dismiss="modal"
@@ -88,11 +98,23 @@
 </template>
 <script>
 import moment from "moment";
+import axios from "axios";
+import VuePictureSwipe from "vue-picture-swipe";
 export default {
   name: "TimeLine",
   props: {
     title: String,
     states: Array,
+  },
+  components: {
+    "vue-picture-swipe": VuePictureSwipe,
+  },
+  data() {
+    return {
+      detail: null,
+      media: [],
+      urlApi: process.env.VUE_APP_URL_API,
+    };
   },
   methods: {
     formatDate(value) {
@@ -100,6 +122,22 @@ export default {
       if (value) {
         return moment(String(value)).format("LL");
       }
+    },
+    async getDetail(id, detail) {
+      const res = await axios.get(this.urlApi + "media-by-response/" + id);
+      this.detail = detail;
+      res.data.data.forEach((element) =>
+        this.media.push({
+          src: element.url,
+          thumbnail: element.url,
+          w: 600,
+          h: 400,
+        })
+      );
+    },
+    resetData() {
+      this.media = [];
+      this.detail = null;
     },
   },
 };
