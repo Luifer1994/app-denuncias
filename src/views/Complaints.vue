@@ -111,7 +111,7 @@
       class="alert alert-warning d-flex justify-content-center"
       role="alert"
     >
-      <span class="text-danger">Registro no encontrado</span>
+      <span class="text-danger">No se encontraron registros</span>
     </div>
     <div class="table-responsive">
       <table class="table table-hover table-centered table-nowrap mb-0 rounded">

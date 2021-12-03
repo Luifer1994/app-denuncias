@@ -43,22 +43,10 @@
 
         <ul id="nav" class="nav flex-column pt-3 pt-md-0">
           <li class="nav-item">
-            <router-link
-              to="/"
-              class="nav-link"
-              data-bs-toggle="collapse"
-              data-bs-target="#sidebarMenu"
-            >
-              <div data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
-                <span class="sidebar-icon">
-                  <i class="fas fa-chart-pie"></i>
-                </span>
-                <span class="sidebar-text">Home</span>
-              </div>
-            </router-link>
+            
           </li>
           <li class="nav-item">
-            <router-link to="/complaints" class="nav-link">
+            <router-link to="/" class="nav-link">
               <div data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
                 <span class="sidebar-icon">
                   <i class="fas fa-exclamation-circle"></i>

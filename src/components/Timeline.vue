@@ -12,18 +12,18 @@
           >
             <div class="px-4">
               <div
-                class="event-date bg-soft-success text-success"
+                class="event-date bg-soft-success text-dark"
                 v-if="state.id_state_complaint == 1"
               >
                 INICIADA
               </div>
               <div
-                class="event-date bg-soft-primary text-primary"
+                class="event-date bg-soft-primary text-dark"
                 v-else-if="state.id_state_complaint == 2"
               >
                 EN PROCESO
               </div>
-              <div class="event-date bg-soft-danger text-gander" v-else>
+              <div class="event-date bg-soft-danger text-dark" v-else>
                 FINALIZADA
               </div>
               <h5 class="font-size-16">{{ formatDate(state.created_at) }}</h5>
@@ -182,13 +182,13 @@ export default {
   }
 }
 .bg-soft-primary {
-  background-color: rgba(64, 144, 203, 0.3) !important;
+  background-color: rgb(13, 142, 235) !important;
 }
 .bg-soft-success {
-  background-color: rgba(71, 189, 154, 0.3) !important;
+  background-color: rgba(8, 245, 174, 0.993) !important;
 }
 .bg-soft-danger {
-  background-color: rgba(231, 76, 94, 0.3) !important;
+  background-color: rgb(245, 56, 78) !important;
 }
 .bg-soft-warning {
   background-color: rgba(249, 213, 112, 0.3) !important;

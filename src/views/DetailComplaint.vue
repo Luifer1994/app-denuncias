@@ -1,14 +1,14 @@
 <template>
-  <time-line :title="title" :states="states"/>
+  <time-line :title="title" :states="states" />
   <div class="card card-body border-0 shadow">
     <div class="card-body">
       <div class="row g-0">
         <div class="col-8 col-sm-8 col-md-3">
           <p>Denunciante:</p>
           <p class="h5" v-if="informer">{{ informer }}</p>
-          <span class="badge bg-danger" v-else>
-            ANÓNIMO
-          </span>
+          <span class="badge bg-danger" v-else> ANÓNIMO </span>
+          <p>Dirección:</p>
+          {{addres}}
         </div>
         <div class="col-8 col-sm-8 col-md-3">
           <p>Motivo:</p>
@@ -47,6 +47,12 @@
           <hr />
           <p>Evidencias:</p>
           <vue-picture-swipe :items="media"></vue-picture-swipe>
+          <p>Video de denuncia:</p>
+          <div class="" v-if="video">
+            <video width="320" height="240" controls>
+              <source :src="video.url" :type="video.type" />
+            </video>
+          </div>
         </div>
       </div>
       <div class="col mt-2">
@@ -80,14 +86,18 @@ export default {
       state: null,
       type_complaint: null,
       description: null,
+      addres:null,
       media: [],
+      video: null,
       states: null,
       title: null,
+      longitude: null,
+      latitude: null,
+      indice: null,
     };
   },
   mounted() {
     this.getComplaint(this.$route.params.id);
-    this.setupLeafletMap();
   },
   methods: {
     async getComplaint(id) {
@@ -98,19 +108,28 @@ export default {
       this.state = res.data.data.state;
       this.type_complaint = res.data.data.type_complaint;
       this.description = res.data.data.description;
+      this.addres = res.data.data.address;
       this.title = "Denuncia: " + res.data.data.cod;
       this.states = res.data.data.response_complaint;
-      res.data.data.media.forEach((element) =>
-        this.media.push({
-          src: element.url,
-          thumbnail: element.url,
-          w: 600,
-          h: 400,
-        })
-      );
+      this.latitude = res.data.data.latitude;
+      this.longitude = res.data.data.longitude;
+      res.data.data.media.forEach((element) => {
+        
+        if (element.type.includes("image")) {
+          this.media.push({
+            src: element.url,
+            thumbnail: element.url,
+            w: 600,
+            h: 400,
+          });
+        } else if (element.type.includes("video")) {
+          this.video = element;
+        }
+      });
+      this.setupLeafletMap(this.longitude, this.latitude);
     },
-    setupLeafletMap: function () {
-      var map = L.map("map").setView([12.5856922, -81.7120337], 14);
+    setupLeafletMap: function (lon, latitude) {
+      var map = L.map("map").setView([latitude, lon], 14);
       L.tileLayer(
         "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
         {
@@ -131,7 +150,7 @@ export default {
         iconSize: [60, 60],
         iconAnchor: [60, 60],
       });
-      L.marker([12.5856922, -81.7120337], { icon: iconMarker }).addTo(map);
+      L.marker([latitude, lon], { icon: iconMarker }).addTo(map);
     },
   },
 };

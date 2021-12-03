@@ -3,9 +3,9 @@ import { createRouter, createWebHistory } from "vue-router";
 const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "complaints",
     component: () =>
-      import(/* webpackChunkName: "home" */ "../components/Dashboard.vue"),
+      import(/* webpackChunkName: "home" */ "../views/Complaints.vue"),
   },
   {
     path: "/complaint/:id",
