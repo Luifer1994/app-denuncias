@@ -1,5 +1,7 @@
-import { initializeApp } from "firebase/app";
-import { getStorage } from "firebase/storage";
+import firebase from 'firebase/compat/app';
+import { initializeApp } from "firebase/app"
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -14,8 +16,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const  defaultStorage = getStorage(app);
+const firebaseApp  = initializeApp(firebaseConfig);
+const  defaultStorage = firebaseApp.storage();
 
 export const  UploadFile = (file)=>{
 
