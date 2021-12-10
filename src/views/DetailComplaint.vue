@@ -171,6 +171,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import VuePictureSwipe from "vue-picture-swipe";
 import Timeline from "../components/Timeline.vue";
+import {UploadFile} from "../utils/firebase"
 export default {
   name: "DetailComplaint",
   components: {
@@ -272,11 +273,10 @@ export default {
     },
     uploadImage(e) {
       const file = e.target.files[0];
-     
+     UploadFile(file)
       const reader = new FileReader();
       //  console.log(image.type);
       reader.readAsDataURL(file);
-      console.log(file);
       if (file.type.includes("image")) {
         reader.onload = (e) => {
           this.previewImage = e.target.result;
