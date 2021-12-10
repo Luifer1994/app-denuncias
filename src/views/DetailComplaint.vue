@@ -43,6 +43,15 @@
             <h5>{{ name_user_asigne }}</h5>
             <p>{{ email_user_asigne }}</p>
           </div>
+          <button
+            v-if="user_asigne"
+            @click="getOfficials()"
+            data-bs-toggle="modal"
+            data-bs-target="#asigneUser"
+            class="btn btn-info"
+          >
+            Responder
+          </button>
         </div>
       </div>
     </div>
@@ -89,7 +98,10 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="asigneUser">Asignar funcionario</h5>
+          <h5 class="modal-title" v-if="!user_asigne" id="asigneUser">
+            Asignar funcionario
+          </h5>
+          <h5 class="modal-title" v-else id="asigneUser">Responder</h5>
           <button
             type="button"
             class="btn-close"
@@ -98,7 +110,7 @@
           ></button>
         </div>
         <div class="modal-body">
-          <div class="mb-3">
+          <div class="mb-3" v-if="!user_asigne">
             <label for="exampleFormControlInput1" class="form-label"
               >Seleccione el funcionario:</label
             >
@@ -159,6 +171,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import VuePictureSwipe from "vue-picture-swipe";
 import Timeline from "../components/Timeline.vue";
+import {UploadFile} from "../utils/firebase"
 export default {
   name: "DetailComplaint",
   components: {
@@ -260,7 +273,7 @@ export default {
     },
     uploadImage(e) {
       const file = e.target.files[0];
-     
+     UploadFile(file)
       const reader = new FileReader();
       //  console.log(image.type);
       reader.readAsDataURL(file);
@@ -296,7 +309,7 @@ export default {
         if (container != null) {
           container._leaflet_id = null;
         }
-        this.getComplaint(this.$route.params.id);
+        this.$router.go();
       }
     },
     async getUserAsigne(id) {

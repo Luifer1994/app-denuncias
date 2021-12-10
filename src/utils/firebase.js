@@ -22,7 +22,7 @@ const  defaultStorage = firebaseApp.storage();
 export const  UploadFile = (file)=>{
 
 
-    return Promise( resolve=>{
+    return new Promise( resolve=>{
         let ref =   defaultStorage.ref("responses-files");
        let task =  ref.child(file.name).put(file);
        task.on('state_changed', function(snapshot){
@@ -32,7 +32,7 @@ export const  UploadFile = (file)=>{
       }, function() {
         // Handle successful uploads on complete
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+        task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
             resolve(downloadURL);
           console.log('File available at', downloadURL);
         });
