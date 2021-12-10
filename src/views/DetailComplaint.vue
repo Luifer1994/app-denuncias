@@ -272,6 +272,7 @@ export default {
     },
     uploadImage(e) {
       const file = e.target.files[0];
+     
       const reader = new FileReader();
       //  console.log(image.type);
       reader.readAsDataURL(file);
