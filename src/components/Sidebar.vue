@@ -24,7 +24,7 @@
               />
             </div>
             <div class="d-block">
-              <h2 class="h5 mb-3">Hola, {{this.$store.state.user.name}}</h2>
+              <h2 class="h5 mb-3">Hola, {{ this.$store.state.user.name }}</h2>
             </div>
           </div>
           <div class="collapse-close d-md-none">
@@ -42,9 +42,7 @@
         </div>
 
         <ul id="nav" class="nav flex-column pt-3 pt-md-0">
-          <li class="nav-item">
-            
-          </li>
+          <li class="nav-item"></li>
           <li class="nav-item">
             <router-link to="/" class="nav-link">
               <div data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
@@ -52,6 +50,17 @@
                   <i class="fas fa-exclamation-circle"></i>
                 </span>
                 <span class="sidebar-text">Denuncias</span>
+              </div>
+            </router-link>
+          </li>
+
+          <li class="nav-item">
+            <router-link to="/officials" class="nav-link">
+              <div data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
+                <span class="sidebar-icon">
+                  <i class="fas fa-users"></i>
+                </span>
+                <span class="sidebar-text">Funcionarios</span>
               </div>
             </router-link>
           </li>
@@ -121,6 +130,6 @@
 </template>
 <script>
 export default {
-  name: "Sidebar"
+  name: "Sidebar",
 };
 </script>

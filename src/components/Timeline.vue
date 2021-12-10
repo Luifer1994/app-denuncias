@@ -2,12 +2,11 @@
   <div class="card">
     <div class="card-body">
       <h4 class="card-title mb-5">{{ title }}</h4>
-
       <div class="hori-timeline" dir="ltr">
         <ul class="list-inline events">
           <li
             class="list-inline-item event-list"
-            v-for="state in states"
+            v-for="state in array"
             :key="state"
           >
             <div class="px-4">
@@ -27,9 +26,6 @@
                 FINALIZADA
               </div>
               <h5 class="font-size-16">{{ formatDate(state.created_at) }}</h5>
-              <p class="text-muted description">
-                {{ state.description }}
-              </p>
               <div>
                 <a
                   v-if="state.id_state_complaint == 1"
@@ -38,7 +34,7 @@
                   >Detalle</a
                 >
                 <a
-                  @click="getDetail(state.id, state.description)"
+                  @click="getDetail(state.id, state.description, state.subItem)"
                   v-else
                   href="#description"
                   class="btn btn-success text-white btn-sm p-1"
@@ -78,9 +74,20 @@
           <h5>Descripcion:</h5>
           <br />
           <p>{{ detail }}</p>
-          <hr />
-          <h5>Evidencias:</h5>
-          <vue-picture-swipe :items="media"></vue-picture-swipe>
+
+          <div v-if="this.subItemResponses.length > 0">
+            <div v-for="item in subItemResponses" :key="item">
+              <span class="text-sm text-info">
+                {{ formatDate(item.created_at) }}
+              </span>
+              <p>{{item.description}}</p>
+            </div>
+          </div>
+          <div v-if="media.length > 0">
+            <hr />
+            <h5>Evidencias:</h5>
+            <vue-picture-swipe :items="media"></vue-picture-swipe>
+          </div>
         </div>
         <div class="modal-footer">
           <button
@@ -114,7 +121,24 @@ export default {
       detail: null,
       media: [],
       urlApi: process.env.VUE_APP_URL_API,
+      array: [],
+      subItemResponses: [],
     };
+  },
+  mounted() {
+    let data = [];
+    const exist = (id) => {
+      return data.findIndex((element) => element.id_state_complaint === id);
+    };
+    this.states.forEach((item) => {
+      let indexItem = exist(item.id_state_complaint);
+      if (indexItem === -1) {
+        data.push({ ...item, subItem: [] });
+      } else {
+        data[indexItem].subItem.push(item);
+      }
+    });
+    this.array = data;
   },
   methods: {
     formatDate(value) {
@@ -123,9 +147,11 @@ export default {
         return moment(String(value)).format("LL");
       }
     },
-    async getDetail(id, detail) {
+    async getDetail(id, detail, subItem) {
       const res = await axios.get(this.urlApi + "media-by-response/" + id);
+      this.subItemResponses = subItem;
       this.detail = detail;
+      console.log(this.subItemResponses);
       res.data.data.forEach((element) =>
         this.media.push({
           src: element.url,
@@ -198,10 +224,5 @@ export default {
   margin-bottom: 24px;
   -webkit-box-shadow: 0 0 13px 0 rgba(236, 236, 241, 0.44);
   box-shadow: 0 0 13px 0 rgba(236, 236, 241, 0.44);
-}
-.description {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 </style>
