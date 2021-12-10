@@ -218,7 +218,7 @@ export default {
       }
       let res = await axios.get(
         this.urlApi +
-          "list-users-informers?search=" +
+          "list-users-official?search=" +
           this.search +
           "&limit=" +
           this.limitPage +
