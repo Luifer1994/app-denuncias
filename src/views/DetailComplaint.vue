@@ -50,7 +50,7 @@
             data-bs-target="#asigneUser"
             class="btn btn-info"
           >
-            Responder
+            Agregar respuesta
           </button>
         </div>
       </div>
@@ -157,8 +157,21 @@
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
             Cancelar
           </button>
-          <button @click="asigneUser()" type="button" class="btn btn-info">
+          <button
+            v-if="!user_asigne"
+            @click="asigneUser()"
+            type="button"
+            class="btn btn-info"
+          >
             Asignar
+          </button>
+          <button
+            v-else
+            @click="storeResponse()"
+            type="button"
+            class="btn btn-info"
+          >
+            Guardar
           </button>
         </div>
       </div>
@@ -171,7 +184,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import VuePictureSwipe from "vue-picture-swipe";
 import Timeline from "../components/Timeline.vue";
-import {UploadFile} from "../utils/firebase"
+//import {UploadFile} from "../utils/firebase"
 export default {
   name: "DetailComplaint",
   components: {
@@ -273,7 +286,7 @@ export default {
     },
     uploadImage(e) {
       const file = e.target.files[0];
-     UploadFile(file)
+      /*  UploadFile(file) */
       const reader = new FileReader();
       //  console.log(image.type);
       reader.readAsDataURL(file);
@@ -318,6 +331,20 @@ export default {
       });
       this.email_user_asigne = res.data.data.email;
       this.name_user_asigne = res.data.data.name;
+    },
+    async storeResponse() {
+      var content = new Object();
+      content.description = this.detail;
+      content.media_response = this.media_response;
+      const res = await axios.put(
+        this.urlApi + "complaint-update-proccess/" + this.$route.params.id,
+        content,
+        {
+          headers: { Authorization: `Bearer ${this.token}` },
+        }
+      );
+      console.log(content);
+      console.log(res);
     },
     noty(message, typeMessage) {
       const notyf = new window.noty({

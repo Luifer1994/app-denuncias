@@ -77,6 +77,10 @@
 
           <div v-if="this.subItemResponses.length > 0">
             <div v-for="item in subItemResponses" :key="item">
+              <span class="text-sm">
+               <b>Respuestas:</b>
+              </span>
+              <br>
               <span class="text-sm text-info">
                 {{ formatDate(item.created_at) }}
               </span>
