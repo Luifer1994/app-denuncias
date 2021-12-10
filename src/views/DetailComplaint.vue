@@ -128,7 +128,11 @@
             <label class="form-label">Agregar detalles:</label>
             <textarea v-model="detail" class="form-control" rows="5"></textarea>
           </div>
-
+          <div class="d-flex justify-content-center" v-if="uploadResponse">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
           <div class="mb-3" v-if="state !== 'INICIADA'">
             <div class="d-flex justify-content-center">
               <div>
@@ -157,22 +161,30 @@
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
             Cancelar
           </button>
-          <button
-            v-if="!user_asigne"
-            @click="asigneUser()"
-            type="button"
-            class="btn btn-info"
-          >
-            Asignar
-          </button>
-          <button
-            v-else
-            @click="storeResponse()"
-            type="button"
-            class="btn btn-info"
-          >
-            Guardar
-          </button>
+          <div v-if="!user_asigne">
+            <button @click="asigneUser()" type="button" class="btn btn-info">
+              Asignar
+            </button>
+          </div>
+          <div v-else>
+            <button
+              @click="storeResponse()"
+              type="button"
+              class="btn btn-info"
+              v-if="!uploadResponse"
+            >
+              Guardar
+            </button>
+            <button
+              v-else
+              @click="storeResponse()"
+              type="button"
+              class="btn btn-info"
+              disabled
+            >
+              Guardar
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -184,7 +196,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import VuePictureSwipe from "vue-picture-swipe";
 import Timeline from "../components/Timeline.vue";
-//import {UploadFile} from "../utils/firebase"
+import { UploadFile } from "../utils/firebase";
 export default {
   name: "DetailComplaint",
   components: {
@@ -217,6 +229,8 @@ export default {
       previewPDF: false,
       name_user_asigne: null,
       email_user_asigne: null,
+      fileResponse: null,
+      uploadResponse: false,
     };
   },
   mounted() {
@@ -284,11 +298,14 @@ export default {
       });
       this.officials = res.data.data;
     },
-    uploadImage(e) {
+    async uploadImage(e) {
+      this.uploadResponse = true;
       const file = e.target.files[0];
-      /*  UploadFile(file) */
+      const res = await UploadFile(file);
+      this.fileResponse = new Object();
+      this.fileResponse.type = file.type;
+      this.fileResponse.url = res;
       const reader = new FileReader();
-      //  console.log(image.type);
       reader.readAsDataURL(file);
       if (file.type.includes("image")) {
         reader.onload = (e) => {
@@ -299,6 +316,7 @@ export default {
         this.previewPDF = true;
         this.previewImage = null;
       }
+      this.uploadResponse = false;
     },
     async asigneUser() {
       var content = new Object();
@@ -317,7 +335,6 @@ export default {
         );
         this.noty(res.data.message, "info");
         window.$("#asigneUser").modal("hide");
-        //let id = this.$route.params.id;
         var container = L.DomUtil.get("map");
         if (container != null) {
           container._leaflet_id = null;
@@ -335,7 +352,9 @@ export default {
     async storeResponse() {
       var content = new Object();
       content.description = this.detail;
-      content.media_response = this.media_response;
+      if (this.fileResponse) {
+        content.media_response = [this.fileResponse];
+      }
       const res = await axios.put(
         this.urlApi + "complaint-update-proccess/" + this.$route.params.id,
         content,
@@ -343,8 +362,11 @@ export default {
           headers: { Authorization: `Bearer ${this.token}` },
         }
       );
-      console.log(content);
-      console.log(res);
+      this.noty(res.data.message, "info");
+      window.$("#asigneUser").modal("hide");
+      this.detail = null;
+      this.fileResponse = null;
+      this.$router.go();
     },
     noty(message, typeMessage) {
       const notyf = new window.noty({
@@ -384,5 +406,10 @@ export default {
   display: flex;
   width: 160px;
   height: 180px;
+}
+.disable {
+  cursor: not-allowed;
+  background-color: rgb(229, 229, 229) !important;
+  pointer-events: none;
 }
 </style>

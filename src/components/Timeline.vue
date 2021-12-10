@@ -71,20 +71,29 @@
           ></button>
         </div>
         <div class="modal-body">
-          <h5>Descripcion:</h5>
+          <h5>Descripción inicial:</h5>
           <br />
           <p>{{ detail }}</p>
-
+          <span class="text-sm">
+            <b>Respuestas:</b>
+          </span>
           <div v-if="this.subItemResponses.length > 0">
             <div v-for="item in subItemResponses" :key="item">
-              <span class="text-sm">
-               <b>Respuestas:</b>
-              </span>
-              <br>
+              <span class="text-sm"> Fecha: </span>
               <span class="text-sm text-info">
                 {{ formatDate(item.created_at) }}
               </span>
-              <p>{{item.description}}</p>
+              <br />
+              <span class="text-sm">
+                Realizada por:
+                <b>{{ item.user.name }}</b>
+                <b v-if="item.user.last_name">{{ item.user.last_name }}</b>
+              </span>
+              <br />
+              <span class="text-sm">
+                Detalle:
+                <p>{{ item.description }}</p>
+              </span>
             </div>
           </div>
           <div v-if="media.length > 0">
