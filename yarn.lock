@@ -1944,6 +1944,20 @@
   resolved "https://registry.npmjs.org/@vue/web-component-wrapper/-/web-component-wrapper-1.3.0.tgz"
   integrity sha512-Iu8Tbg3f+emIIMmI2ycSI8QcEuAUgPTgHwesDU1eKMLE4YC/c/sFbGc70QgMq31ijRftV0R7vCm9co6rldCeOA==
 
+"@vuelidate/core@^2.0.0-alpha.32":
+  version "2.0.0-alpha.32"
+  resolved "https://registry.yarnpkg.com/@vuelidate/core/-/core-2.0.0-alpha.32.tgz#1ad6f4e6480a3fa061d5c0fe3d26f7c7b23e55dd"
+  integrity sha512-bB5YJzorKZyRm+R4d3svGChwpHjPw+ECOLwlKfvKJIuyC+y25Wf7NGbr/9odZggoGTi/rKPUYXhpbp5RXb4ssw==
+  dependencies:
+    vue-demi "^0.12.0"
+
+"@vuelidate/validators@^2.0.0-alpha.25":
+  version "2.0.0-alpha.25"
+  resolved "https://registry.yarnpkg.com/@vuelidate/validators/-/validators-2.0.0-alpha.25.tgz#c58aede525772f1ae120b308de08cd5196ba0cb3"
+  integrity sha512-+Cz9itIlPbloXE8hWmTWCS/EXYdgZ0y/mH76v9Ou0ILirVUjErTtgEx/jCfkijbFJAttBTdwJmxaWakwQuA0qA==
+  dependencies:
+    vue-demi "^0.12.0"
+
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
   resolved "https://registry.npmjs.org/@webassemblyjs/ast/-/ast-1.9.0.tgz"
@@ -4442,7 +4456,7 @@ find-up@^4.0.0:
 
 firebase@^9.6.1:
   version "9.6.1"
-  resolved "https://registry.yarnpkg.com/firebase/-/firebase-9.6.1.tgz#08e0fd0799f57a885f895b86a6ed2bc0083412fe"
+  resolved "https://registry.npmjs.org/firebase/-/firebase-9.6.1.tgz"
   integrity sha512-d4wbkVMRiSREa1jfFx2z/Kq3KueEKfNWApvdrEAxvzDRN4eiFLeZSZM/MOxj7TR01e/hANnw2lrYKMUpg21ukg==
   dependencies:
     "@firebase/analytics" "0.7.4"
@@ -8882,6 +8896,11 @@ vm-browserify@^1.0.1:
   resolved "https://registry.npmjs.org/vm-browserify/-/vm-browserify-1.1.2.tgz"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
+vue-demi@^0.12.0:
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.12.1.tgz#f7e18efbecffd11ab069d1472d7a06e319b4174c"
+  integrity sha512-QL3ny+wX8c6Xm1/EZylbgzdoDolye+VpCXRhI2hug9dJTP3OUJ3lmiKN3CsVV3mOJKwFi0nsstbgob0vG7aoIw==
+
 vue-eslint-parser@^7.10.0:
   version "7.11.0"
   resolved "https://registry.npmjs.org/vue-eslint-parser/-/vue-eslint-parser-7.11.0.tgz"
@@ -8988,6 +9007,11 @@ vue@^3.0.0:
     "@vue/runtime-dom" "3.2.20"
     "@vue/server-renderer" "3.2.20"
     "@vue/shared" "3.2.20"
+
+vuelidate@^0.7.7:
+  version "0.7.7"
+  resolved "https://registry.npmjs.org/vuelidate/-/vuelidate-0.7.7.tgz"
+  integrity sha512-pT/U2lDI67wkIqI4tum7cMSIfGcAMfB+Phtqh2ttdXURwvHRBJEAQ0tVbUsW9Upg83Q5QH59bnCoXI7A9JDGnA==
 
 vuex-persist@^3.1.3:
   version "3.1.3"

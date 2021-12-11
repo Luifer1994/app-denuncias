@@ -10,12 +10,20 @@
     "
   >
     <div class="d-block mb-4 mb-md-0">
-      <h2 class="h4">Denunciantes</h2>
+      <h2 class="h4">Funcionarios</h2>
     </div>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group ms-2 ms-lg-3">
-        <button type="button" class="btn btn-sm btn-outline-gray-600">
-          Exportar
+        <button
+          type="button"
+          class="btn btn-sm btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#registerUser"
+          @click="
+            getTypePeople(), getTypeDocument(), getRols(), getProfessions()
+          "
+        >
+          Registrar
         </button>
       </div>
     </div>
@@ -180,6 +188,126 @@
       </div>
     </div>
   </div>
+  <!-- Modal asignar funcionario -->
+  <div
+    ref="my-modal"
+    class="modal fade"
+    id="registerUser"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="registerUser"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-dialog modal-lg">
+      <div class="modal-content">
+        <form v-on:submit.prevent="storeOficcial()">
+          <div class="modal-header">
+            <h5 class="modal-title" id="registerUser">Registrar funcionario</h5>
+
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <div class="row">
+                <div class="col-sm-5 col-md-6">
+                  <label class="form-label">Rol:</label>
+                  <select class="form-control" v-model="rol" required>
+                    <option v-for="rol in rols" :key="rol" :value="rol.id">
+                      {{ rol.name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-sm-5 col-md-6">
+                  <label class="form-label">Tipo de persona:</label>
+                  <select class="form-control" v-model="typePeople" required>
+                    <option
+                      v-for="type in typePeoples"
+                      :key="type"
+                      :value="type.id"
+                    >
+                      {{ type.name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-sm-5 col-md-6">
+                  <label class="form-label">Profesión:</label>
+                  <select class="form-control" v-model="profession" required>
+                    <option
+                      v-for="profession in professions"
+                      :key="profession"
+                      :value="profession.id"
+                    >
+                      {{ profession.name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
+                  <label class="form-label">Tipo de documento:</label>
+                  <select class="form-control" v-model="typeDocument" required>
+                    <option
+                      v-for="type in typeDocuments"
+                      :key="type"
+                      :value="type.id"
+                    >
+                      {{ type.name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
+                  <label class="form-label">Número de documento:</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    v-model="document"
+                    required
+                  />
+                </div>
+                <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
+                  <label class="form-label">Nombres:</label>
+                  <input type="text" class="form-control" v-model="name" required/>
+                </div>
+                <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
+                  <label class="form-label">Apellidos:</label>
+                  <input type="text" class="form-control" v-model="last_name" required/>
+                </div>
+                <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
+                  <label class="form-label">Email:</label>
+                  <input type="email" class="form-control" v-model="email" required/>
+                </div>
+                <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
+                  <label class="form-label">Télefono:</label>
+                  <input type="text" class="form-control" v-model="phone" required/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <div>
+              <button
+                type="submit"
+                class="btn btn-info"
+              >
+                Registrar
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import axios from "axios";
@@ -196,6 +324,19 @@ export default {
       page: 1,
       search: "",
       total: null,
+      typePeoples: null,
+      typeDocuments: null,
+      rols: null,
+      professions: null,
+      rol: null,
+      typePeople: null,
+      profession: null,
+      typeDocument: null,
+      document: null,
+      name: null,
+      last_name: null,
+      email: null,
+      phone: null,
     };
   },
   mounted() {
@@ -209,7 +350,6 @@ export default {
       }
     },
     async list(limit = null, page = null) {
-      console.log(this.$store.state.user);
       if (limit) {
         this.limitPage = limit;
       }
@@ -238,6 +378,73 @@ export default {
     views(num) {
       this.limitPage = num;
       this.list(this.limit, this.page);
+    },
+    async getTypePeople() {
+      const res = await axios.get(this.urlApi + "list-type-peoples");
+      this.typePeoples = res.data.data;
+    },
+    async getTypeDocument() {
+      const res = await axios.get(this.urlApi + "list-type-documents");
+      this.typeDocuments = res.data.data;
+    },
+    async getRols() {
+      const res = await axios.get(this.urlApi + "rols-active");
+      this.rols = res.data.data;
+    },
+    async getProfessions() {
+      const res = await axios.get(this.urlApi + "professions-active");
+      this.professions = res.data.data;
+    },
+    async storeOficcial() {
+      const content = new Object();
+      content.type_people = this.typePeople;
+      content.type_document = this.typeDocument;
+      content.document = this.document;
+      content.name = this.name;
+      content.last_name = this.last_name;
+      content.email = this.email;
+      content.phone = this.phone;
+      content.profession = this.profession;
+      content.rol = this.rol;
+      try {
+        const res = await axios.post(
+          this.urlApi + "register-official",
+          content,
+          {
+            headers: { Authorization: `Bearer ${this.token}` },
+          }
+        );
+        this.noty(res.data.message, "info");
+        window.$("#registerUser").modal("hide");
+        this.list();
+      } catch (error) {
+        this.noty(error.response.data.email, "error");
+        //console.log(error.response.data.email);
+      }
+    },
+    noty(message, typeMessage) {
+      const notyf = new window.noty({
+        position: {
+          x: "rigth",
+          y: "top",
+        },
+        types: [
+          {
+            type: "info",
+            background: "#06AB17",
+            icon: {
+              className: "fas fa-check-double",
+              tagName: "span",
+              color: "#fff",
+            },
+            dismissible: false,
+          },
+        ],
+      });
+      notyf.open({
+        type: typeMessage,
+        message: message,
+      });
     },
   },
 };

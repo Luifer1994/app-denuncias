@@ -10,6 +10,8 @@
   "dependencies": {
     "@morioh/v-lightbox": "^1.0.3",
     "@vue-leaflet/vue-leaflet": "^0.6.1",
+    "@vuelidate/core": "^2.0.0-alpha.32",
+    "@vuelidate/validators": "^2.0.0-alpha.25",
     "axios": "^0.23.0",
     "core-js": "^3.6.5",
     "firebase": "^9.6.1",
@@ -22,6 +24,7 @@
     "vue-picture-swipe": "^2.1.0",
     "vue-router": "^4.0.0-0",
     "vue-silentbox": "^2.4.5",
+    "vuelidate": "^0.7.7",
     "vuex": "^4.0.2",
     "vuex-persist": "^3.1.3"
   },
