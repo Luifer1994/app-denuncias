@@ -162,6 +162,12 @@
               >
                 {{ complaint.state }}
               </span>
+              <span
+                class="badge bg-warning"
+                v-else-if="complaint.state == 'INDAGACIÓN'"
+              >
+                {{ complaint.state }}
+              </span>
               <span class="badge bg-danger" v-else>
                 {{ complaint.state }}
               </span>

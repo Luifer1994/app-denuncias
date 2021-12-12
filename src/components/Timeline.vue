@@ -22,6 +22,12 @@
               >
                 EN PROCESO
               </div>
+              <div
+                class="event-date bg-soft-warning text-dark"
+                v-else-if="state.id_state_complaint == 3"
+              >
+                INDAGACIÓN
+              </div>
               <div class="event-date bg-soft-danger text-dark" v-else>
                 FINALIZADA
               </div>
@@ -197,23 +203,7 @@ export default {
           h: 400,
         })
       );
-      /* this.subItemResponses.forEach((el) => {
-        this.getMediaSubItem(el.id);
-      });
-      console.log(this.mediaSubItem); */
     },
-    /* async getMediaSubItem(id) {
-      const res = await axios.get(this.urlApi + "media-by-response/" + id);
-      //console.log(Object.assign({}, res.data.data[0]));
-      res.data.data.forEach((element) =>
-        this.mediaSubItem.push({
-          src: element.url,
-          thumbnail: element.url,
-          w: 600,
-          h: 400,
-        })
-      );
-    }, */
     resetData() {
       this.media = [];
       this.detail = null;
@@ -270,7 +260,7 @@ export default {
   background-color: rgb(245, 56, 78) !important;
 }
 .bg-soft-warning {
-  background-color: rgba(249, 213, 112, 0.3) !important;
+  background-color: rgb(249, 212, 112) !important;
 }
 .card {
   border: none;

@@ -235,7 +235,7 @@
                     </option>
                   </select>
                 </div>
-                <div class="col-sm-5 col-md-6">
+                <div class="col-sm-5 col-md-6" v-if="rol == 3">
                   <label class="form-label">Profesión:</label>
                   <select class="form-control" v-model="profession" required>
                     <option
@@ -270,19 +270,39 @@
                 </div>
                 <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
                   <label class="form-label">Nombres:</label>
-                  <input type="text" class="form-control" v-model="name" required/>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="name"
+                    required
+                  />
                 </div>
                 <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
                   <label class="form-label">Apellidos:</label>
-                  <input type="text" class="form-control" v-model="last_name" required/>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="last_name"
+                    required
+                  />
                 </div>
                 <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
                   <label class="form-label">Email:</label>
-                  <input type="email" class="form-control" v-model="email" required/>
+                  <input
+                    type="email"
+                    class="form-control"
+                    v-model="email"
+                    required
+                  />
                 </div>
                 <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
                   <label class="form-label">Télefono:</label>
-                  <input type="text" class="form-control" v-model="phone" required/>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="phone"
+                    required
+                  />
                 </div>
               </div>
             </div>
@@ -296,12 +316,7 @@
               Cancelar
             </button>
             <div>
-              <button
-                type="submit"
-                class="btn btn-info"
-              >
-                Registrar
-              </button>
+              <button type="submit" class="btn btn-info">Registrar</button>
             </div>
           </div>
         </form>
@@ -416,11 +431,22 @@ export default {
         );
         this.noty(res.data.message, "info");
         window.$("#registerUser").modal("hide");
+        this.resectData();
         this.list();
       } catch (error) {
         this.noty(error.response.data.email, "error");
-        //console.log(error.response.data.email);
       }
+    },
+    resectData() {
+      this.typePeople = null;
+      this.typeDocument = null;
+      this.document = null;
+      this.name = null;
+      this.last_name = null;
+      this.email = null;
+      this.phone = null;
+      this.profession = null;
+      this.rol = null;
     },
     noty(message, typeMessage) {
       const notyf = new window.noty({

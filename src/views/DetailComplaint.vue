@@ -10,11 +10,21 @@
           <p>Dirección:</p>
           {{ addres }}
         </div>
-        <div class="col-8 col-sm-8 col-md-3">
+        <div class="col-8 col-sm-8 col-md-2">
           <p>Infracción:</p>
           <p class="h5">{{ type_complaint }}</p>
         </div>
         <div class="col-8 col-sm-8 col-md-3">
+          <p>Funcionario Asignado:</p>
+          <div v-if="!user_asigne">
+            <span class="badge bg-danger"> SIN ASIGNACIÓN </span>
+          </div>
+          <div v-else>
+            <h5>{{ name_user_asigne }}</h5>
+            <p>{{ email_user_asigne }}</p>
+          </div>
+        </div>
+        <div class="col-8 col-sm-8 col-md-2">
           <p>Estado actual:</p>
           <span class="badge bg-success" v-if="state == 'INICIADA'">
             {{ state }}
@@ -22,27 +32,20 @@
           <span class="badge bg-info" v-else-if="state == 'EN PROCESO'">
             {{ state }}
           </span>
+          <div v-else-if="state == 'INDAGACIÓN'">
+            <span class="badge bg-soft-warning">
+              {{ state }}
+            </span>
+            <p>Abogado asignado:</p>
+            <b>{{ lawyer }}</b>
+          </div>
+
           <span class="badge bg-danger" v-else>
             {{ state }}
           </span>
         </div>
-        <div class="col-8 col-sm-8 col-md-3">
-          <div v-if="!user_asigne">
-            <p>Sin asiganación</p>
-            <button
-              @click="getOfficials()"
-              data-bs-toggle="modal"
-              data-bs-target="#asigneUser"
-              class="btn btn-danger"
-            >
-              Asignar funcionario
-            </button>
-          </div>
-          <div v-else>
-            <p>Funcionario asiganado:</p>
-            <h5>{{ name_user_asigne }}</h5>
-            <p>{{ email_user_asigne }}</p>
-          </div>
+        <div class="col-8 col-sm-8 col-md-2">
+          <p>Acciones:</p>
           <button
             v-if="user_asigne"
             @click="getOfficials()"
@@ -51,6 +54,32 @@
             class="btn btn-info"
           >
             Agregar respuesta
+          </button>
+          <button
+            v-if="state == 'EN PROCESO'"
+            @click="getLawyer()"
+            data-bs-toggle="modal"
+            data-bs-target="#asigneUser"
+            class="btn btn-warning mt-2"
+          >
+            Llevar a Indagación
+          </button>
+          <button
+            v-if="!user_asigne"
+            @click="getOfficials()"
+            data-bs-toggle="modal"
+            data-bs-target="#asigneUser"
+            class="btn btn-danger mt-2"
+          >
+            Asignar funcionario</button
+          ><button
+            v-if="state !== 'FINALIZADA' && state !== 'INICIADA'"
+            @click="closing()"
+            data-bs-toggle="modal"
+            data-bs-target="#asigneUser"
+            class="btn btn-danger mt-2"
+          >
+            Cerrar Denuncia
           </button>
         </div>
       </div>
@@ -101,8 +130,11 @@
           <h5 class="modal-title" v-if="!user_asigne" id="asigneUser">
             Asignar funcionario
           </h5>
+          <h5 class="modal-title" v-else-if="inquiry">Asignar indagación</h5>
+          <h5 class="modal-title" v-else-if="closed">Cerrar Denuncia</h5>
           <h5 class="modal-title" v-else id="asigneUser">Responder</h5>
           <button
+            @click="resetData()"
             type="button"
             class="btn-close"
             data-bs-dismiss="modal"
@@ -120,7 +152,21 @@
                 :key="official"
                 :value="official.id"
               >
-                {{ official.name }}
+                {{ official.name }} {{ official.last_name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3" v-if="inquiry">
+            <label for="exampleFormControlInput1" class="form-label"
+              >Seleccionar abogado:</label
+            >
+            <select v-model="id_lawyer" class="form-select">
+              <option
+                v-for="lawyer in lawyers"
+                :key="lawyer"
+                :value="lawyer.id"
+              >
+                {{ lawyer.name }} {{ lawyer.last_name }}
               </option>
             </select>
           </div>
@@ -133,7 +179,7 @@
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>
-          <div class="mb-3" v-if="state !== 'INICIADA'">
+          <div class="mb-3" v-if="state !== 'INICIADA' && !inquiry">
             <div class="d-flex justify-content-center">
               <div>
                 <img
@@ -158,12 +204,35 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          <button
+            @click="resetData()"
+            type="button"
+            class="btn btn-danger"
+            data-bs-dismiss="modal"
+          >
             Cancelar
           </button>
           <div v-if="!user_asigne">
             <button @click="asigneUser()" type="button" class="btn btn-info">
               Asignar
+            </button>
+          </div>
+          <div v-else-if="inquiry">
+            <button @click="asigneLawyer()" type="button" class="btn btn-info">
+              Asignar
+            </button>
+          </div>
+          <div v-else-if="closed">
+            <button
+              @click="closedComplaint()"
+              type="button"
+              class="btn btn-info"
+              v-if="!uploadResponse"
+            >
+              Guardar
+            </button>
+            <button type="button" class="btn btn-info" v-else disabled>
+              Guardar
             </button>
           </div>
           <div v-else>
@@ -231,6 +300,11 @@ export default {
       email_user_asigne: null,
       fileResponse: null,
       uploadResponse: false,
+      lawyers: null,
+      inquiry: false,
+      id_lawyer: null,
+      name_lawyer: null,
+      closed: false,
     };
   },
   mounted() {
@@ -241,6 +315,11 @@ export default {
       const res = await axios.get(this.urlApi + "complaints/" + id, {
         headers: { Authorization: `Bearer ${this.token}` },
       });
+
+      this.lawyer =
+        res.data.data.name_user_inquest +
+        " " +
+        res.data.data.last_name_user_inquest;
       this.informer = res.data.data.informer;
       this.state = res.data.data.state;
       this.type_complaint = res.data.data.type_complaint;
@@ -298,6 +377,14 @@ export default {
       });
       this.officials = res.data.data;
     },
+    async getLawyer() {
+      this.inquiry = true;
+      const res = await axios.get(this.urlApi + "list-users-lawyer", {
+        headers: { Authorization: `Bearer ${this.token}` },
+      });
+      this.lawyers = res.data.data;
+      console.log(this.lawyers);
+    },
     async uploadImage(e) {
       this.uploadResponse = true;
       const file = e.target.files[0];
@@ -341,6 +428,45 @@ export default {
         }
         this.$router.go();
       }
+    },
+    async asigneLawyer() {
+      var content = new Object();
+      content.lawyer = this.id_lawyer;
+      content.description = this.detail;
+      if (!this.id_lawyer) {
+        this.message = "Selecciona un abogado";
+        this.typeMessage = "error";
+        this.noty(this.message, this.typeMessage);
+      } else {
+        const res = await axios.put(
+          this.urlApi + "asigne-lawyer/" + this.$route.params.id,
+          content,
+          { headers: { Authorization: `Bearer ${this.token}` } }
+        );
+        this.noty(res.data.message, "info");
+        window.$("#asigneUser").modal("hide");
+        this.$router.go();
+        this.inquiry = false;
+      }
+    },
+    async closedComplaint() {
+      var content = new Object();
+      content.description = this.detail;
+      if (this.fileResponse) {
+        content.media_response = [this.fileResponse];
+      }
+      const res = await axios.put(
+        this.urlApi + "complaint-closed/" + this.$route.params.id,
+        content,
+        { headers: { Authorization: `Bearer ${this.token}` } }
+      );
+      this.noty(res.data.message, "info");
+      window.$("#asigneUser").modal("hide");
+      this.$router.go();
+      this.closed = false;
+    },
+    closing() {
+      this.closed = true;
     },
     async getUserAsigne(id) {
       const res = await axios.get(this.urlApi + "filter-user-by-id/" + id, {
@@ -392,6 +518,10 @@ export default {
         message: message,
       });
     },
+    resetData() {
+      this.inquiry = false;
+      this.closed = false;
+    },
   },
 };
 </script>
@@ -411,5 +541,9 @@ export default {
   cursor: not-allowed;
   background-color: rgb(229, 229, 229) !important;
   pointer-events: none;
+}
+.bg-soft-warning {
+  background-color: rgb(249, 212, 112) !important;
+  color: rgb(58, 58, 58);
 }
 </style>
