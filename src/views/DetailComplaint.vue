@@ -404,8 +404,8 @@ export default {
 }
 .uploading-image {
   display: flex;
-  width: 160px;
-  height: 180px;
+  width: 130px;
+  height: 150px;
 }
 .disable {
   cursor: not-allowed;

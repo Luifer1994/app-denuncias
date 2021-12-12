@@ -94,6 +94,30 @@
                 Detalle:
                 <p>{{ item.description }}</p>
               </span>
+              <div v-for="item in item.media_response" :key="item">
+                <a :href="item.url"
+                target="_blank" 
+                  v-if="item.type == 'application/pdf'">
+                  <img
+                  class="uploading-image"
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1200px-PDF_file_icon.svg.png"
+                />
+                </a>
+                
+                <vue-picture-swipe
+                  v-else
+                  :items="[
+                    {
+                      src: item.url,
+                      thumbnail: item.url,
+                      w: 600,
+                      h: 400,
+                      title: 'Will be used for caption',
+                    },
+                  ]"
+                ></vue-picture-swipe>
+              </div>
+              <hr />
             </div>
           </div>
           <div v-if="media.length > 0">
@@ -161,10 +185,10 @@ export default {
       }
     },
     async getDetail(id, detail, subItem) {
+      console.log(subItem);
       const res = await axios.get(this.urlApi + "media-by-response/" + id);
       this.subItemResponses = subItem;
       this.detail = detail;
-      console.log(this.subItemResponses);
       res.data.data.forEach((element) =>
         this.media.push({
           src: element.url,
@@ -173,7 +197,23 @@ export default {
           h: 400,
         })
       );
+      /* this.subItemResponses.forEach((el) => {
+        this.getMediaSubItem(el.id);
+      });
+      console.log(this.mediaSubItem); */
     },
+    /* async getMediaSubItem(id) {
+      const res = await axios.get(this.urlApi + "media-by-response/" + id);
+      //console.log(Object.assign({}, res.data.data[0]));
+      res.data.data.forEach((element) =>
+        this.mediaSubItem.push({
+          src: element.url,
+          thumbnail: element.url,
+          w: 600,
+          h: 400,
+        })
+      );
+    }, */
     resetData() {
       this.media = [];
       this.detail = null;
