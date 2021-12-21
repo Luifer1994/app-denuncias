@@ -13,9 +13,13 @@
     </div>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group ms-2 ms-lg-3">
-        <button type="button" class="btn btn-sm btn-outline-gray-600">
-          Exportar
-        </button>
+        <a
+          @click="ExportData()"
+          type="button"
+          class="btn btn-sm btn-outline-gray-600"
+        >
+          Exportar <i class="fas fa-file-excel"></i>
+        </a>
       </div>
     </div>
   </div>
@@ -52,6 +56,7 @@
             <b v-if="!state">Estado</b>
             <b v-else-if="state == 1">INICIADA</b>
             <b v-else-if="state == 2">EN PROCESO</b>
+            <b v-else-if="state == 3">INDAGACIÓN</b>
             <b v-else>FINALIZADA</b>
             <i class="fas fa-filter"></i>
           </button>
@@ -66,6 +71,9 @@
               >EN PROCESO</a
             >
             <a class="dropdown-item fw-bold" @click="filterState(3)"
+              >INDAGACIÓN</a
+            >
+            <a class="dropdown-item fw-bold" @click="filterState(5)"
               >FINALIZADA</a
             >
           </div>
@@ -217,6 +225,7 @@
 <script>
 import axios from "axios";
 import moment from "moment";
+import ExportJsonExcel from "js-export-excel";
 export default {
   name: "Complaints",
   data() {
@@ -230,12 +239,45 @@ export default {
       search: "",
       total: null,
       state: "",
+      option: {},
     };
   },
   mounted() {
     this.list();
   },
   methods: {
+    async ExportData() {
+      const data = await axios.get(this.urlApi + "complaints-export");
+      this.option.fileName = "Denuncias";
+      let sheetData = [];
+      data.data.forEach((element) => {
+        sheetData.push(element);
+      });
+
+      this.option.datas = [
+        {
+          sheetData,
+          sheetName: "DENUNCIAS",
+          sheetHeader: [
+            "CÓDIGO",
+            "DIRECCIÓN",
+            "LATITUD",
+            "LONGITUD",
+            "DESCRIPCIÓN",
+            "INFRACTOR",
+            "FECHA CREACIÓN",
+            "MOTIVO DENUNCIA",
+            "DENUNCIANTE",
+            "TÉCNICO ASIGNADO",
+            "ABOGADO ASIGNADO",
+            "ESTADO",
+          ],
+          columnWidths: [5, 12, 7, 7, 30, 12, 10, 10, 12, 12, 15, ""],
+        },
+      ];
+      var toExcel = new ExportJsonExcel(this.option);
+      toExcel.saveExcel();
+    },
     async list(limit = null, page = null, state = "") {
       if (limit) {
         this.limitPage = limit;

@@ -56,12 +56,8 @@
           <div class="d-grid">
             <button @click="login" class="btn btn-gray-800">Login</button>
           </div>
-
-          <div class="d-flex justify-content-center align-items-center mt-4">
-            <span class="fw-normal">
-              No estas registrado?
-              <a href="./sign-up.html" class="fw-bold">Crear cuenta</a>
-            </span>
+          <div class="mt-3 mb-4 text-center">
+            <router-link to="/forgot-password">¿Olvidaste tu contraseña?</router-link>
           </div>
         </div>
       </div>
@@ -87,7 +83,7 @@ export default {
         dataUser.password = this.userPassword;
         let res = await axios.post(this.urlApi + "login", dataUser);
 
-        if (res.data.data.user.rol.id == 1) {
+        if (res.data.data.user.rol.id !== 2) {
           this.$store.commit("userLogin", res.data.data.user);
           this.message = res.data.data.message;
           this.noty(this.message, "info");

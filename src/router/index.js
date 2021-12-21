@@ -26,6 +26,18 @@ const routes = [
       import(/* webpackChunkName: "login" */ "../views/Login.vue"),
   },
   {
+    path: "/forgot-password",
+    name: "Forgot",
+    component: () =>
+      import(/* webpackChunkName: "login" */ "../views/ForgotPassword.vue"),
+  },
+  {
+    path: "/reset-password",
+    name: "ResetPassword",
+    component: () =>
+      import(/* webpackChunkName: "login" */ "../views/ResetPassword.vue"),
+  },
+  {
     path: "/informers",
     name: "Informers",
     component: () =>
@@ -42,7 +54,7 @@ const routes = [
     name: "Complaints",
     component: () =>
       import(/* webpackChunkName: "complaints" */ "../views/Complaints.vue"),
-  },
+  }
 ];
 
 const router = createRouter({
@@ -61,7 +73,7 @@ router.beforeEach((to, from, next) => {
   if (isLogin) {
     next();
   } else {
-    if (to.name === "Login") {
+    if (to.name === "Login" || to.name === "Forgot" || to.name === "ResetPassword") {
       next();
     } else {
       next("login");

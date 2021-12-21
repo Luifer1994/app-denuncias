@@ -11,13 +11,6 @@
     <div class="d-block mb-4 mb-md-0">
       <h2 class="h4">Denunciantes</h2>
     </div>
-    <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group ms-2 ms-lg-3">
-        <button type="button" class="btn btn-sm btn-outline-gray-600">
-          Exportar
-        </button>
-      </div>
-    </div>
   </div>
   <div class="table-settings mb-4">
     <div class="row align-items-center justify-content-between">
@@ -31,7 +24,7 @@
             @keyup="list()"
             type="text"
             class="form-control"
-            placeholder="Buscar"
+            placeholder="Número documento"
           />
         </div>
       </div>
@@ -81,23 +74,23 @@
     <table class="table table-hover" v-if="total > 0">
       <thead class="thead-light">
         <tr>
-          <th class="border-gray-200">ID</th>
+          <th class="border-gray-200">DOCUMENTO</th>
           <th class="border-gray-200">NOMBRE</th>
           <th class="border-gray-200">EMAIL</th>
           <th class="border-gray-200">TÉLEFONO</th>
           <th class="border-gray-200">FECHA REGISTRO</th>
           <th class="border-gray-200">NÚMERO DENUNCIAS</th>
-          <th class="border-gray-200">ACIONES</th>
+          <!-- <th class="border-gray-200">ACIONES</th> -->
         </tr>
       </thead>
       <tbody>
         <!-- Item -->
         <tr v-for="informer in this.informers" :key="informer">
           <td>
-            <a href="#" class="fw-bold">{{ informer.id }}</a>
+            <a href="#" class="fw-bold">{{ informer.document }}</a>
           </td>
           <td>
-            <span class="fw-normal">{{ informer.name }}</span>
+            <span class="fw-normal">{{ informer.name }} {{ informer.last_name }}</span>
           </td>
           <td>
             <span class="fw-normal">{{ informer.email }}</span>
@@ -116,7 +109,7 @@
               {{ informer.complaint_count }}
             </span>
           </td>
-          <td>
+          <!-- <td>
             <div class="btn-group">
               <button
                 class="
@@ -142,12 +135,9 @@
                 <a class="dropdown-item" href="#"
                   ><span class="fas fa-edit me-2"></span>Edit</a
                 >
-                <a class="dropdown-item text-danger rounded-bottom" href="#"
-                  ><span class="fas fa-trash-alt me-2"></span>Remove</a
-                >
               </div>
             </div>
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </table>

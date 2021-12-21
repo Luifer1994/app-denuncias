@@ -56,7 +56,7 @@
             Agregar respuesta
           </button>
           <button
-            v-if="state == 'EN PROCESO'"
+            v-if="state == 'EN PROCESO' && this.$store.state.user.id_rol === 1"
             @click="getLawyer()"
             data-bs-toggle="modal"
             data-bs-target="#asigneUser"
@@ -65,7 +65,7 @@
             Llevar a Indagación
           </button>
           <button
-            v-if="!user_asigne"
+            v-if="!user_asigne && this.$store.state.user.id_rol === 1"
             @click="getOfficials()"
             data-bs-toggle="modal"
             data-bs-target="#asigneUser"
@@ -73,7 +73,7 @@
           >
             Asignar funcionario</button
           ><button
-            v-if="state !== 'FINALIZADA' && state !== 'INICIADA'"
+            v-if="state !== 'FINALIZADA' && state !== 'INICIADA' && this.$store.state.user.id_profession !== 3"
             @click="closing()"
             data-bs-toggle="modal"
             data-bs-target="#asigneUser"

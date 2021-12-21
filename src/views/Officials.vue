@@ -15,6 +15,7 @@
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group ms-2 ms-lg-3">
         <button
+          v-if="this.$store.state.user.id_rol === 1"
           type="button"
           class="btn btn-sm btn-primary"
           data-bs-toggle="modal"
@@ -40,7 +41,7 @@
             @keyup="list()"
             type="text"
             class="form-control"
-            placeholder="Buscar"
+            placeholder="Número documento"
           />
         </div>
       </div>
@@ -90,12 +91,14 @@
     <table class="table table-hover" v-if="total > 0">
       <thead class="thead-light">
         <tr>
-          <th class="border-gray-200">ID</th>
+          <th class="border-gray-200">DOCUMENTO</th>
           <th class="border-gray-200">NOMBRE</th>
           <th class="border-gray-200">EMAIL</th>
           <th class="border-gray-200">TÉLEFONO</th>
-          <th class="border-gray-200">FECHA REGISTRO</th>
-          <th class="border-gray-200">NÚMERO DENUNCIAS</th>
+          <th class="border-gray-200">NÚMERO CONTRATO</th>
+          <!-- <th class="border-gray-200">FECHA REGISTRO</th> -->
+          <th class="border-gray-200">ROL</th>
+          <th class="border-gray-200">PROFESIÓN</th>
           <th class="border-gray-200">ACIONES</th>
         </tr>
       </thead>
@@ -103,10 +106,12 @@
         <!-- Item -->
         <tr v-for="informer in this.informers" :key="informer">
           <td>
-            <a href="#" class="fw-bold">{{ informer.id }}</a>
+            <a href="#" class="fw-bold">{{ informer.document }}</a>
           </td>
           <td>
-            <span class="fw-normal">{{ informer.name }}</span>
+            <span class="fw-normal"
+              >{{ informer.name }} {{ informer.last_name }}</span
+            >
           </td>
           <td>
             <span class="fw-normal">{{ informer.email }}</span>
@@ -115,14 +120,41 @@
             <span class="fw-normal">{{ informer.phone }}</span>
           </td>
           <td>
-            <span class="fw-bold">{{ formatDate(informer.created_at) }}</span>
+            <span class="fw-bold" v-if="informer.id_rol === 1">N/A</span>
+            <span class="fw-bold" v-else>{{ informer.number_contract }}</span>
           </td>
           <td>
-            <span class="badge bg-info" v-if="informer.complaint_count > 0">
-              {{ informer.complaint_count }}
+            <span class="badge bg-danger" v-if="informer.id_rol === 1">
+              <span class="fw-normal">{{ informer.rol.toUpperCase() }}</span>
             </span>
-            <span class="badge bg-danger" v-else>
-              {{ informer.complaint_count }}
+            <span class="badge bg-info" v-else>
+              <span class="fw-normal">{{ informer.rol.toUpperCase() }}</span>
+            </span>
+          </td>
+          <td>
+            <span class="badge bg-danger" v-if="informer.id_rol === 1">
+              <span class="fw-normal">N/A</span>
+            </span>
+            <span
+              class="badge bg-success"
+              v-else-if="informer.id_profession === 2"
+            >
+              <span class="fw-normal">{{
+                informer.profession.toUpperCase()
+              }}</span>
+            </span>
+            <span
+              class="badge bg-primary"
+              v-else-if="informer.id_profession === 3"
+            >
+              <span class="fw-normal">{{
+                informer.profession.toUpperCase()
+              }}</span>
+            </span>
+            <span class="badge bg-warning-edit" v-else>
+              <span class="fw-normal">{{
+                informer.profession.toUpperCase()
+              }}</span>
             </span>
           </td>
           <td>
@@ -145,14 +177,15 @@
                 <span class="visually-hidden">Toggle Dropdown</span>
               </button>
               <div class="dropdown-menu py-0">
-                <a class="dropdown-item rounded-top" href="#"
+                <!-- <a class="dropdown-item rounded-top" href="#"
                   ><span class="fas fa-eye me-2"></span>View Details</a
-                >
-                <a class="dropdown-item" href="#"
-                  ><span class="fas fa-edit me-2"></span>Edit</a
-                >
-                <a class="dropdown-item text-danger rounded-bottom" href="#"
-                  ><span class="fas fa-trash-alt me-2"></span>Remove</a
+                > -->
+                <a
+                  class="dropdown-item"
+                  data-bs-toggle="modal"
+                  data-bs-target="#registerUser"
+                  @click="edit(informer)"
+                  ><span class="fas fa-edit me-2"></span>Editar</a
                 >
               </div>
             </div>
@@ -203,13 +236,19 @@
       <div class="modal-content">
         <form v-on:submit.prevent="storeOficcial()">
           <div class="modal-header">
-            <h5 class="modal-title" id="registerUser">Registrar funcionario</h5>
+            <h5 class="modal-title" v-if="!editing" id="registerUser">
+              Registrar funcionario
+            </h5>
+            <h5 class="modal-title" v-else id="registerUser">
+              Editar funcionario
+            </h5>
 
             <button
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              @click="resectData()"
             ></button>
           </div>
           <div class="modal-body">
@@ -286,6 +325,18 @@
                     required
                   />
                 </div>
+                <div
+                  class="col-sm-5 offset-sm-2 col-md-6 offset-md-0"
+                  v-if="rol == 3"
+                >
+                  <label class="form-label">Número de contrato:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="number_contract"
+                    required
+                  />
+                </div>
                 <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
                   <label class="form-label">Email:</label>
                   <input
@@ -312,11 +363,29 @@
               type="button"
               class="btn btn-danger"
               data-bs-dismiss="modal"
+              @click="resectData()"
             >
               Cancelar
             </button>
-            <div>
-              <button type="submit" class="btn btn-info">Registrar</button>
+            <div v-if="!editing">
+              <div v-if="!this.storing">
+                <button type="submit" class="btn btn-info">Registrar</button>
+              </div>
+              <div class="d-grid" v-else>
+                <button type="submit" class="btn btn-info" disabled>
+                  Registrando...
+                </button>
+              </div>
+            </div>
+            <div v-else>
+              <div v-if="!this.updating">
+                <button @click="update()" class="btn btn-info">
+                  Actualizar
+                </button>
+              </div>
+              <div class="d-grid" v-else>
+                <button class="btn btn-info" disabled>Actualizando...</button>
+              </div>
             </div>
           </div>
         </form>
@@ -352,6 +421,11 @@ export default {
       last_name: null,
       email: null,
       phone: null,
+      storing: false,
+      number_contract: null,
+      editing: false,
+      updating: false,
+      id_user: null,
     };
   },
   mounted() {
@@ -387,6 +461,58 @@ export default {
       this.links = res.data.data.links.slice(1, res.data.data.links.length - 1);
       this.total = res.data.data.total;
     },
+    async edit(user) {
+      this.editing = true;
+      this.name = user.name;
+      this.getRols();
+      this.rol = user.id_rol;
+      this.getTypeDocument();
+      this.typeDocument = user.id_type_document;
+      this.getTypePeople();
+      this.typePeople = user.id_type_people;
+      this.getProfessions();
+      this.profession = user.id_profession;
+      this.email = user.email;
+      this.phone = user.phone;
+      this.document = user.document;
+      this.last_name = user.last_name;
+      this.number_contract = user.number_contract;
+      this.id_user = user.id;
+    },
+    async update() {
+      this.updating = true;
+      const content = new Object();
+      content.type_people = this.typePeople;
+      content.type_document = this.typeDocument;
+      content.document = this.document;
+      content.name = this.name;
+      content.last_name = this.last_name;
+      content.email = this.email;
+      content.phone = this.phone;
+      content.profession = this.profession;
+      content.rol = this.rol;
+      content.number_contract = this.number_contract;
+      try {
+        const res = await axios.put(
+          this.urlApi + "update-official/" + this.id_user,
+          content,
+          {
+            headers: { Authorization: `Bearer ${this.token}` },
+          }
+        );
+        this.noty(res.data.message, "info");
+        window.$("#registerUser").modal("hide");
+        this.resectData();
+        this.list();
+      } catch (error) {
+        let errors = Object.values(error.response.data);
+        for (let index = 0; index < errors.length; index++) {
+          const element = errors[index];
+          this.noty(element, "error");
+        }
+      }
+      this.updating = false;
+    },
     next(num) {
       this.list(this.limit, num);
     },
@@ -421,7 +547,9 @@ export default {
       content.phone = this.phone;
       content.profession = this.profession;
       content.rol = this.rol;
+      content.number_contract = this.number_contract;
       try {
+        this.storing = true;
         const res = await axios.post(
           this.urlApi + "register-official",
           content,
@@ -435,6 +563,7 @@ export default {
         this.list();
       } catch (error) {
         this.noty(error.response.data.email, "error");
+        this.storing = false;
       }
     },
     resectData() {
@@ -447,6 +576,9 @@ export default {
       this.phone = null;
       this.profession = null;
       this.rol = null;
+      (this.number_contract = null), (this.storing = false);
+      this.editing = false;
+      this.updating = false;
     },
     noty(message, typeMessage) {
       const notyf = new window.noty({
@@ -478,6 +610,14 @@ export default {
 <style>
 .active {
   background-color: rgb(11, 4, 51);
+  color: aliceblue;
+}
+.bg-warning-edit {
+  background-color: rgb(246, 137, 58);
+  color: aliceblue;
+}
+.bg-secret {
+  background-color: rgb(62, 29, 172);
   color: aliceblue;
 }
 </style>

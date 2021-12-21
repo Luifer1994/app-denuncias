@@ -54,7 +54,7 @@
             </router-link>
           </li>
 
-          <li class="nav-item">
+          <li class="nav-item" v-if="this.$store.state.user.id_rol === 1">
             <router-link to="/officials" class="nav-link">
               <div data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
                 <span class="sidebar-icon">

@@ -1,8 +1,25 @@
 <template>
-  <Sidebar v-if="$route.name !=='Login'"></Sidebar>
+  <Sidebar
+    v-if="
+      $route.name === 'complaints' ||
+      $route.name === 'Informers' ||
+      $route.name === 'Officials' ||
+      $route.name === 'Perfil' ||
+      $route.name === 'DetailComplaint' ||
+      $route.name === 'Complaints'
+    "
+  ></Sidebar>
   <main class="content">
-    <Navbar v-if="$route.name !=='Login'"></Navbar>
-
+    <Navbar
+      v-if="
+        $route.name === 'complaints' ||
+        $route.name === 'Informers' ||
+        $route.name === 'Officials' ||
+        $route.name === 'Perfil' ||
+        $route.name === 'DetailComplaint' ||
+        $route.name === 'Complaints'
+      "
+    ></Navbar>
     <!--  RENDERIZACION DE COMPONENTES -->
     <router-view />
     <!--  FIN -->
@@ -16,7 +33,7 @@ export default {
   components: {
     Sidebar,
     Navbar,
-  }
+  },
 };
 </script>
 
