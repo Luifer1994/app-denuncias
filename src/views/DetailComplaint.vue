@@ -51,7 +51,7 @@
             {{ state }}
           </span>
         </div>
-        <div class="col-8 col-sm-8 col-md-2">
+        <div v-if="state !== 'CANCELADA'" class="col-8 col-sm-8 col-md-2">
           <p>Acciones:</p>
           <button
             v-if="user_asigne"
@@ -103,6 +103,15 @@
           >
             Cerrar Denuncia
           </button>
+
+          <button
+            @click="canceln()"
+            data-bs-toggle="modal"
+            data-bs-target="#asigneUser"
+            class="btn btn-danger mt-2"
+          >
+            Cancelar denuncia
+          </button>
         </div>
       </div>
     </div>
@@ -149,7 +158,8 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" v-if="!user_asigne" id="asigneUser">
+          <h5 class="modal-title" v-if="canceling">Cancelar</h5>
+          <h5 class="modal-title" v-else-if="!user_asigne" id="asigneUser">
             Asignar funcionario
           </h5>
           <h5 class="modal-title" v-else-if="inquiry">Asignar indagación</h5>
@@ -162,6 +172,7 @@
           >
             Notificar
           </h5>
+
           <h5 class="modal-title" v-else id="asigneUser">Responder</h5>
           <button
             @click="resetData()"
@@ -172,40 +183,43 @@
           ></button>
         </div>
         <div class="modal-body">
-          <div
-            class="mb-3"
-            v-if="
-              !user_asigne ||
-              (state == 'INDAGACIÓN' && this.$store.state.user.id_rol === 1)
-            "
-          >
-            <label for="exampleFormControlInput1" class="form-label"
-              >Seleccione el funcionario:</label
+          <div v-if="!canceling">
+            <div
+              class="mb-3"
+              v-if="
+                !user_asigne ||
+                (state == 'INDAGACIÓN' && this.$store.state.user.id_rol === 1)
+              "
             >
-            <select v-model="id_user_asine" class="form-select">
-              <option
-                v-for="official in officials"
-                :key="official"
-                :value="official.id"
+              <label for="exampleFormControlInput1" class="form-label"
+                >Seleccione el funcionario:</label
               >
-                {{ official.name }} {{ official.last_name }}
-              </option>
-            </select>
-          </div>
-          <div class="mb-3" v-if="inquiry">
-            <label for="exampleFormControlInput1" class="form-label"
-              >Seleccionar abogado:</label
-            >
-            <select v-model="id_lawyer" class="form-select">
-              <option
-                v-for="lawyer in lawyers"
-                :key="lawyer"
-                :value="lawyer.id"
+              <select v-model="id_user_asine" class="form-select">
+                <option
+                  v-for="official in officials"
+                  :key="official"
+                  :value="official.id"
+                >
+                  {{ official.name }} {{ official.last_name }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3" v-if="inquiry">
+              <label for="exampleFormControlInput1" class="form-label"
+                >Seleccionar abogado:</label
               >
-                {{ lawyer.name }} {{ lawyer.last_name }}
-              </option>
-            </select>
+              <select v-model="id_lawyer" class="form-select">
+                <option
+                  v-for="lawyer in lawyers"
+                  :key="lawyer"
+                  :value="lawyer.id"
+                >
+                  {{ lawyer.name }} {{ lawyer.last_name }}
+                </option>
+              </select>
+            </div>
           </div>
+
           <div class="mb-3">
             <label class="form-label">Agregar detalles:</label>
             <textarea v-model="detail" class="form-control" rows="5"></textarea>
@@ -215,7 +229,10 @@
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>
-          <div class="mb-3" v-if="state !== 'INICIADA' && !inquiry">
+          <div
+            class="mb-3"
+            v-if="state !== 'INICIADA' && !inquiry && !canceling"
+          >
             <div class="d-flex justify-content-center">
               <div>
                 <img
@@ -248,7 +265,12 @@
           >
             Cancelar
           </button>
-          <div v-if="!user_asigne">
+          <div v-if="canceling">
+            <button @click="cancel()" type="button" class="btn btn-info">
+              Continuar
+            </button>
+          </div>
+          <div v-else-if="!user_asigne">
             <button @click="asigneUser()" type="button" class="btn btn-info">
               Asignar
             </button>
@@ -351,12 +373,17 @@ export default {
       id_lawyer: null,
       name_lawyer: null,
       closed: false,
+      canceling: false,
     };
   },
   mounted() {
     this.getComplaint(this.$route.params.id);
   },
   methods: {
+    canceln() {
+      this.canceling = true;
+    },
+
     async getComplaint(id) {
       const res = await axios.get(this.urlApi + "complaints/" + id, {
         headers: { Authorization: `Bearer ${this.token}` },
@@ -532,6 +559,22 @@ export default {
       this.$router.go();
       this.closed = false;
     },
+    async cancel() {
+      var content = new Object();
+      content.description = this.detail;
+      if (this.fileResponse) {
+        content.media_response = [this.fileResponse];
+      }
+      const res = await axios.put(
+        this.urlApi + "complaint-cancel/" + this.$route.params.id,
+        content,
+        { headers: { Authorization: `Bearer ${this.token}` } }
+      );
+      this.noty(res.data.message, "info");
+      window.$("#asigneUser").modal("hide");
+      this.$router.go();
+      this.canceling = false;
+    },
     closing() {
       this.closed = true;
     },
@@ -588,6 +631,7 @@ export default {
     resetData() {
       this.inquiry = false;
       this.closed = false;
+      this.canceling = false;
     },
   },
 };

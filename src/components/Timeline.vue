@@ -40,6 +40,12 @@
               >
                 FINALIZADA
               </div>
+              <div
+                class="event-date bg-soft-danger text-dark"
+                v-else-if="state.id_state_complaint == 7"
+              >
+                CANCELADA
+              </div>
 
               <h5 class="font-size-16">{{ formatDate(state.created_at) }}</h5>
               <div>
