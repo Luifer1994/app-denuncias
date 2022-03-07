@@ -28,9 +28,19 @@
               >
                 INDAGACIÓN
               </div>
-              <div class="event-date bg-soft-danger text-dark" v-else>
+              <div
+                class="event-date bg-soft-success text-dark"
+                v-else-if="state.id_state_complaint == 4"
+              >
+                NOTIFICACIÓN
+              </div>
+              <div
+                class="event-date bg-soft-danger text-dark"
+                v-else-if="state.id_state_complaint == 6"
+              >
                 FINALIZADA
               </div>
+
               <h5 class="font-size-16">{{ formatDate(state.created_at) }}</h5>
               <div>
                 <a
@@ -101,15 +111,34 @@
                 <p>{{ item.description }}</p>
               </span>
               <div v-for="item in item.media_response" :key="item">
-                <a :href="item.url"
-                target="_blank" 
-                  v-if="item.type == 'application/pdf'">
+                <a
+                  :href="item.url"
+                  target="_blank"
+                  v-if="item.type == 'application/pdf'"
+                >
                   <img
-                  class="uploading-image"
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1200px-PDF_file_icon.svg.png"
-                />
+                    class="uploading-image"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1200px-PDF_file_icon.svg.png"
+                  />
                 </a>
-                
+
+                <a
+                  :href="item.url"
+                  target="_blank"
+                  v-else-if="
+                    item.type == 'application/msword' ||
+                    item.type ==
+                      'application/vnd.ms-word.document.macroEnabled.12' ||
+                    item.type ==
+                      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                  "
+                >
+                  <img
+                    class="uploading-image"
+                    src="https://img.icons8.com/color/100/000000/word.png"
+                  />
+                </a>
+
                 <vue-picture-swipe
                   v-else
                   :items="[

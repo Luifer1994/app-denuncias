@@ -57,6 +57,7 @@
             <b v-else-if="state == 1">INICIADA</b>
             <b v-else-if="state == 2">EN PROCESO</b>
             <b v-else-if="state == 3">INDAGACIÓN</b>
+            <b v-else-if="state == 4">NOTIFICACIÓN</b>
             <b v-else>FINALIZADA</b>
             <i class="fas fa-filter"></i>
           </button>
@@ -72,6 +73,9 @@
             >
             <a class="dropdown-item fw-bold" @click="filterState(3)"
               >INDAGACIÓN</a
+            >
+            <a class="dropdown-item fw-bold" @click="filterState(4)"
+              >NOTIFICACIÓN</a
             >
             <a class="dropdown-item fw-bold" @click="filterState(5)"
               >FINALIZADA</a
@@ -176,7 +180,16 @@
               >
                 {{ complaint.state }}
               </span>
-              <span class="badge bg-danger" v-else>
+              <span
+                class="badge bg-success"
+                v-else-if="complaint.state == 'NOTIFICACIÓN'"
+              >
+                {{ complaint.state }}
+              </span>
+              <span
+                class="badge bg-danger"
+                v-else-if="complaint.state == 'FINALIZADA'"
+              >
                 {{ complaint.state }}
               </span>
             </td>

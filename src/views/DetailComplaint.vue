@@ -39,6 +39,13 @@
             <p>Abogado asignado:</p>
             <b>{{ lawyer }}</b>
           </div>
+          <div v-else-if="state == 'NOTIFICACIÓN'">
+            <span class="badge bg-soft-success">
+              {{ state }}
+            </span>
+            <p>Funcionario asignado:</p>
+            <b>{{ name_user_asigne }}</b>
+          </div>
 
           <span class="badge bg-danger" v-else>
             {{ state }}
@@ -64,6 +71,7 @@
           >
             Llevar a Indagación
           </button>
+
           <button
             v-if="!user_asigne && this.$store.state.user.id_rol === 1"
             @click="getOfficials()"
@@ -71,9 +79,23 @@
             data-bs-target="#asigneUser"
             class="btn btn-danger mt-2"
           >
-            Asignar funcionario</button
-          ><button
-            v-if="state !== 'FINALIZADA' && state !== 'INICIADA' && this.$store.state.user.id_profession !== 3"
+            Asignar funcionario
+          </button>
+          <button
+            v-if="state == 'INDAGACIÓN' && this.$store.state.user.id_rol === 1"
+            @click="getOfficials()"
+            data-bs-toggle="modal"
+            data-bs-target="#asigneUser"
+            class="btn btn-success mt-2"
+          >
+            Notificacón
+          </button>
+          <button
+            v-if="
+              state !== 'FINALIZADA' &&
+              state !== 'INICIADA' &&
+              this.$store.state.user.id_rol === 1
+            "
             @click="closing()"
             data-bs-toggle="modal"
             data-bs-target="#asigneUser"
@@ -132,6 +154,14 @@
           </h5>
           <h5 class="modal-title" v-else-if="inquiry">Asignar indagación</h5>
           <h5 class="modal-title" v-else-if="closed">Cerrar Denuncia</h5>
+          <h5
+            class="modal-title"
+            v-else-if="
+              state == 'INDAGACIÓN' && this.$store.state.user.id_rol === 1
+            "
+          >
+            Notificar
+          </h5>
           <h5 class="modal-title" v-else id="asigneUser">Responder</h5>
           <button
             @click="resetData()"
@@ -142,7 +172,13 @@
           ></button>
         </div>
         <div class="modal-body">
-          <div class="mb-3" v-if="!user_asigne">
+          <div
+            class="mb-3"
+            v-if="
+              !user_asigne ||
+              (state == 'INDAGACIÓN' && this.$store.state.user.id_rol === 1)
+            "
+          >
             <label for="exampleFormControlInput1" class="form-label"
               >Seleccione el funcionario:</label
             >
@@ -217,9 +253,19 @@
               Asignar
             </button>
           </div>
+
           <div v-else-if="inquiry">
             <button @click="asigneLawyer()" type="button" class="btn btn-info">
               Asignar
+            </button>
+          </div>
+          <div
+            v-else-if="
+              state == 'INDAGACIÓN' && this.$store.state.user.id_rol === 1
+            "
+          >
+            <button @click="asigneNotify()" type="button" class="btn btn-info">
+              Notificar
             </button>
           </div>
           <div v-else-if="closed">
@@ -449,6 +495,27 @@ export default {
         this.inquiry = false;
       }
     },
+
+    async asigneNotify() {
+      var content = new Object();
+      content.user_asigne = this.id_user_asine;
+      content.description = this.detail;
+      if (!this.id_user_asine) {
+        this.message = "Selecciona un funcionario";
+        this.typeMessage = "error";
+        this.noty(this.message, this.typeMessage);
+      } else {
+        const res = await axios.put(
+          this.urlApi + "asigne-notify/" + this.$route.params.id,
+          content,
+          { headers: { Authorization: `Bearer ${this.token}` } }
+        );
+        this.noty(res.data.message, "info");
+        window.$("#asigneUser").modal("hide");
+        this.$router.go();
+        this.inquiry = false;
+      }
+    },
     async closedComplaint() {
       var content = new Object();
       content.description = this.detail;
@@ -544,6 +611,10 @@ export default {
 }
 .bg-soft-warning {
   background-color: rgb(249, 212, 112) !important;
+  color: rgb(58, 58, 58);
+}
+.bg-soft-success {
+  background-color: rgb(109, 255, 128);
   color: rgb(58, 58, 58);
 }
 </style>

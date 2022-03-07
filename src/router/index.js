@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-
+import axios from "axios";
 const routes = [
   {
     path: "/",
@@ -11,7 +11,9 @@ const routes = [
     path: "/complaint/:id",
     name: "DetailComplaint",
     component: () =>
-      import(/* webpackChunkName: "complaints" */ "../views/DetailComplaint.vue"),
+      import(
+        /* webpackChunkName: "complaints" */ "../views/DetailComplaint.vue"
+      ),
   },
   {
     path: "/perfil",
@@ -54,13 +56,32 @@ const routes = [
     name: "Complaints",
     component: () =>
       import(/* webpackChunkName: "complaints" */ "../views/Complaints.vue"),
-  }
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
+
+async function validateSesion() {
+  const urlApi = process.env.VUE_APP_URL_API;
+  const token = localStorage.getItem("token");
+  try {
+    const res = await axios.get(urlApi + "validate-sesion", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.data) {
+      return true;
+    }
+  } catch (error) {
+    if (error) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("vuex");
+      window.location.reload();
+    }
+  }
+}
 
 function existToken() {
   if (localStorage.getItem("token")) {
@@ -70,10 +91,14 @@ function existToken() {
 
 router.beforeEach((to, from, next) => {
   var isLogin = existToken();
-  if (isLogin) {
+  if (isLogin && validateSesion()) {
     next();
   } else {
-    if (to.name === "Login" || to.name === "Forgot" || to.name === "ResetPassword") {
+    if (
+      to.name === "Login" ||
+      to.name === "Forgot" ||
+      to.name === "ResetPassword"
+    ) {
       next();
     } else {
       next("login");
