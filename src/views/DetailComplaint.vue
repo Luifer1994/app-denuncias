@@ -105,6 +105,7 @@
           </button>
 
           <button
+            v-if="this.$store.state.user.id_rol === 1"
             @click="canceln()"
             data-bs-toggle="modal"
             data-bs-target="#asigneUser"
