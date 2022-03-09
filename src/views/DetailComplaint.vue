@@ -82,6 +82,16 @@
             Asignar funcionario
           </button>
           <button
+            v-if="state !== 'INICIADA' && this.$store.state.user.id_rol === 1"
+            @click="getOfficials(), reasingUser()"
+            data-bs-toggle="modal"
+            data-bs-target="#asigneUser"
+            class="btn btn-primary mt-2"
+          >
+            Reasignar funcionario
+          </button>
+
+          <button
             v-if="state == 'INDAGACIÓN' && this.$store.state.user.id_rol === 1"
             @click="getOfficials()"
             data-bs-toggle="modal"
@@ -160,6 +170,10 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" v-if="canceling">Cancelar</h5>
+          <h5 class="modal-title" v-else-if="reasing" id="asigneUser">
+            Reasignar funcionario
+          </h5>
+
           <h5 class="modal-title" v-else-if="!user_asigne" id="asigneUser">
             Asignar funcionario
           </h5>
@@ -189,6 +203,7 @@
               class="mb-3"
               v-if="
                 !user_asigne ||
+                reasing ||
                 (state == 'INDAGACIÓN' && this.$store.state.user.id_rol === 1)
               "
             >
@@ -232,7 +247,7 @@
           </div>
           <div
             class="mb-3"
-            v-if="state !== 'INICIADA' && !inquiry && !canceling"
+            v-if="state !== 'INICIADA' && !inquiry && !canceling && !reasing"
           >
             <div class="d-flex justify-content-center">
               <div>
@@ -271,7 +286,7 @@
               Continuar
             </button>
           </div>
-          <div v-else-if="!user_asigne">
+          <div v-else-if="!user_asigne || reasing">
             <button @click="asigneUser()" type="button" class="btn btn-info">
               Asignar
             </button>
@@ -375,6 +390,7 @@ export default {
       name_lawyer: null,
       closed: false,
       canceling: false,
+      reasing: false,
     };
   },
   mounted() {
@@ -383,6 +399,9 @@ export default {
   methods: {
     canceln() {
       this.canceling = true;
+    },
+    reasingUser() {
+      this.reasing = true;
     },
 
     async getComplaint(id) {
@@ -633,6 +652,7 @@ export default {
       this.inquiry = false;
       this.closed = false;
       this.canceling = false;
+      this.reasing = false;
     },
   },
 };
